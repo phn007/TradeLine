@@ -17,10 +17,10 @@ class CSetEntryObjects
    public:
       CSetEntryObjects()
       {
-         stopLine   = "P3121_StopLine";
-         entryLine  = "P3121_EntryLine";
-         profitLine = "P3121_ProfitLine";
-         entryFib   = "P3121_RRFib";
+         stopLine   = "TL_P3121_StopLine";
+         entryLine  = "TL_P3121_EntryLine";
+         profitLine = "TL_P3121_ProfitLine";
+         entryFib   = "TL_P3121_RRFib";
          risk       = 5;
       }
       ~CSetEntryObjects(){};

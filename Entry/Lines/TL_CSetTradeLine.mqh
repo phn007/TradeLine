@@ -30,30 +30,19 @@ class CSetTradeLine
       //--- method
       double GetEntryPrice(double stop);
       double GetStopPrice (double gvStop); 
-      //---  
+   private:  
       void CreateLine();
       void DeleteLine(); 
       void SetProperties(); 
    public:
-      CSetTradeLine();
-     ~CSetTradeLine();
+      CSetTradeLine(){};
+     ~CSetTradeLine(){};
      //---
      virtual void SwitchOnOff();
+     void UpdateLine();
      //---
      
 };
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-CSetTradeLine::CSetTradeLine()
-{
-}
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-CSetTradeLine::~CSetTradeLine()
-{
-}
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -88,6 +77,18 @@ double CSetTradeLine::GetStopPrice(double gvStop)
    }   
 }
 //+------------------------------------------------------------------+
+//| Method: GetEntryPrice                                            |
+//+------------------------------------------------------------------+
+double CSetTradeLine::GetEntryPrice(double stop)
+{
+   double bid = SymbolInfoDouble(Symbol(),SYMBOL_BID);
+   double ask = SymbolInfoDouble(Symbol(),SYMBOL_ASK);
+   //---
+   if       (stop > ask && stop > bid) return bid;
+   else if  (stop < ask && stop < bid) return ask;
+   else                  return -1;
+}
+//+------------------------------------------------------------------+
 //| Method : CreateLine                                              |
 //+------------------------------------------------------------------+
 void CSetTradeLine::CreateLine()
@@ -117,5 +118,16 @@ void CSetTradeLine::DeleteLine(void)
    if(ObjectFind(0,lineName) >= 0)
    {
       ObjectDelete(0,lineName);   
+   }
+}
+//+------------------------------------------------------------------+
+//| Method : UpdateLine                                              |
+//+------------------------------------------------------------------+
+void CSetTradeLine::UpdateLine(void)
+{
+   Print(__FUNCTION__);
+   if(gvSwitchTradeLine == 0)
+   {
+      SetProperties();
    }
 }

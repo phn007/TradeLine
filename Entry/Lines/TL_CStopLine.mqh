@@ -17,7 +17,7 @@ class CStopLine : public CSetTradeLine
 
    public:
       CStopLine();
-     ~CStopLine();
+     ~CStopLine(){};
      //---
      void SwitchOnOff();
 };
@@ -34,18 +34,11 @@ CStopLine::CStopLine()
    select   = true;   
 }
 //+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-CStopLine::~CStopLine()
-{
-}
-//+------------------------------------------------------------------+
 void CStopLine::SwitchOnOff(void)
 {
    Print(__FUNCTION__);
    linePrice         = GetStopPrice(gv.stopPrice);
    gvSwitchTradeLine = gv.switchTradeLine;
-   Print(__FUNCTION__, " gvSwitchTradeLine = ", gvSwitchTradeLine);
    //---
    CSetTradeLine::SwitchOnOff();
 }
