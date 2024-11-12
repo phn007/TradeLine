@@ -6,26 +6,19 @@
 #property copyright "Copyright 2024, MetaQuotes Ltd."
 #property link      "https://www.mql5.com"
 #property version   "1.00"
-
-#include "../Entry/TL_CSetEntryObjects.mqh"
-//+------------------------------------------------------------------+
-//| ENUM                                                             |
-//+------------------------------------------------------------------+
-enum SWITCH_TYPE { METHOD,TRADELINE,PANEL,RRFIB,PROLINE };
-
+//---
+#include "../Defines/Defines.mqh"
 //+------------------------------------------------------------------+
 //| Class                                                            |
 //+------------------------------------------------------------------+
 class CGlobalVariables
 {
-   private:
-      CSetEntryObjects base;
    //--- Variables
    public:
       string switchMethodName;
       string switchTradeLineName;
-      string gvStopName;
-      string gvEntryName;
+      string gvStopLineName;
+      string gvEntryLineName;
       //---
       double switchTradeLine;
       double switchMethod;
@@ -40,8 +33,14 @@ class CGlobalVariables
       //---
       void SetInitSwitchMethod();
       void SetSwitchOnOff(SWITCH_TYPE type);
-      void SetPriceLineVars(string name);
-      void GetVars();
+      //---
+      void SetPriceLineVariable(string name);
+      //---
+      SWICTH_METHOD     getSwitchMethod();
+      SWITCH_TRADELINE  getSwitchTradeLine();
+      //---
+      double getStopLinePrice();
+      double getEntryLinePrice();
 };
 //+------------------------------------------------------------------+
 //|  Construct                                                       |
@@ -49,10 +48,10 @@ class CGlobalVariables
 
 CGlobalVariables::CGlobalVariables(void)
 {
-   switchMethodName     = "TL_P3121_OrderMethod_Switch_OnOff";
+   switchMethodName     = "TL_P3121_Trade_Method_Switch_OnOff";
    switchTradeLineName  = "TL_P3121_TradeLine_Switch_OnOff";
-   gvStopName           = "TL_GV3121_" + Symbol() + "_" + base.stopLine;
-   gvEntryName          = "TL_GV3121_" + Symbol() + "_" + base.entryLine;
+   gvStopLineName       = "TL_" + Symbol() + "_" + STOPLINE_NAME;
+   gvEntryLineName      = "TL_" + Symbol() + "_" + ENTRYLINE_NAME;
    //---
    switchTradeLine  = NULL;
    switchMethod     = NULL;
@@ -77,11 +76,12 @@ void CGlobalVariables::SetSwitchOnOff(SWITCH_TYPE type)
 {
    switch(type)
    {
-      case TRADELINE : SetSwitchVariables(switchTradeLineName);    break;
+      case TRADELINE : SetSwitchVariables(switchTradeLineName);   break;
+      case METHOD    : SetSwitchVariables(switchMethodName);      break;
    }
 }
 //+------------------------------------------------------------------+
-//| Method: SetVariables                                             |
+//| Method: SetSwitchVariables                                       |
 //+------------------------------------------------------------------+
 void CGlobalVariables::SetSwitchVariables(string name)
 {
@@ -102,47 +102,67 @@ void CGlobalVariables::SetSwitchVariables(string name)
    }
 }
 //+------------------------------------------------------------------+
-//|                                                                  |
+//| StopLinePrice                                                    |
 //+------------------------------------------------------------------+
-void CGlobalVariables::GetVars(void)
+double CGlobalVariables::getStopLinePrice(void)
 {
-   stopPrice       = GlobalVariableGet(gvStopName);
-   entryPrice      = GlobalVariableGet(gvEntryName);
-   switchMethod    = GlobalVariableGet(switchMethodName);
-   switchTradeLine = GlobalVariableGet(switchTradeLineName);
+   if(GlobalVariableGet(gvStopLineName,stopPrice))
+   {
+      return stopPrice; 
+   } 
+   else return 0;
 }
 //+------------------------------------------------------------------+
-//| Method: SetPriceLineVars                                         |
+//|  EntryLinePrice                                                  |
 //+------------------------------------------------------------------+
-void CGlobalVariables::SetPriceLineVars(string name)
+double CGlobalVariables::getEntryLinePrice(void)
 {
-   //Print(__FUNCTION__," Line Name: ",name);
+   if(GlobalVariableGet(gvEntryLineName,entryPrice))
+   {
+      return entryPrice;
+   }
+   else return 0;
+}
+//+------------------------------------------------------------------+
+//| SwitchMethod                                                     |
+//+------------------------------------------------------------------+
+//*
+SWICTH_METHOD CGlobalVariables::getSwitchMethod()
+{
+   switchMethod = GlobalVariableGet(switchMethodName);
+   Print(__FUNCTION__," switchMethod: ",switchMethod);
+   //---
+   
+   if(switchMethod == 0)        return PENDING;
+   else if(switchMethod == 1)   return MARKET;
+   else                         return NONE;
+}
+//*/
+//+------------------------------------------------------------------+
+//| SwitchTradeLine                                                  |
+//+------------------------------------------------------------------+
+SWITCH_TRADELINE CGlobalVariables::getSwitchTradeLine(void)
+{
+   switchTradeLine = GlobalVariableGet(switchTradeLineName);
+   //---
+   if(switchTradeLine == 0)      return DELETE_TRADELINE;
+   else if(switchTradeLine == 1) return CREATE_TRADELINE;
+   else                          return IGNORE;
+}
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void CGlobalVariables::SetPriceLineVariable(string name)
+{
    double price = 0;
-   if(name == base.stopLine)
+   string gvLineName = NULL;
+   //---
+   if(name == STOPLINE_NAME)        gvLineName = gvStopLineName;
+   else if (name == ENTRYLINE_NAME) gvLineName = gvEntryLineName;  
+   //---
+   if(gvLineName != NULL)
    {
-      if(ObjectFind(0,base.stopLine) >= 0)
-      {
-         price = ObjectGetDouble(0,base.stopLine,OBJPROP_PRICE);
-         //Print(__FUNCTION__," Line Name: ",name," Price: ",price);
-         GlobalVariableSet(gvStopName,price);
-      }
+      price = ObjectGetDouble(0,name,OBJPROP_PRICE);
+      GlobalVariableSet(gvLineName,price);
    }
-   else if(name == base.entryLine)
-   {
-      if(ObjectFind(0,base.entryLine) >= 0)
-      {
-         price = ObjectGetDouble(0,base.entryLine,OBJPROP_PRICE);
-         //Print(__FUNCTION__," Line Name: ",name," Price: ",price);
-         GlobalVariableSet(gvEntryName,price);
-      }
-   }
-   /*else if(name == base.profitLine)
-   {
-      if(ObjectFind(0,base.profitLine) >= 0)
-      {
-         price = ObjectGetDouble(0,base.profitLine,OBJPROP_PRICE);
-         GlobalVariableSet(gvProfitName,price);
-      }
-   }
-   */    
 }

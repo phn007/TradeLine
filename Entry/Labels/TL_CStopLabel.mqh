@@ -24,7 +24,6 @@ class CStopLabel : public CSetLineLabel
 //+------------------------------------------------------------------+
 CStopLabel::CStopLabel()
 { 
-   gv.GetVars();
    //---
    labelName         = base.stopLine + "_Label";
    gvSwitchTradeLine = gv.switchTradeLine;

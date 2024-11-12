@@ -16,7 +16,6 @@ class CEntryLineLabel : public CSetLineLabel
 CEntryLineLabel::CEntryLineLabel()
 {
    Print(__FUNCTION__);
-   gv.GetVars();
    //---
    labelName = base.entryLine + "_Label";
    gvSwitchTradeLine = gv.switchTradeLine;

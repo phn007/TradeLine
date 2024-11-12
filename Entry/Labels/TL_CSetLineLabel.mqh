@@ -7,7 +7,6 @@
 #property link      "https://www.mql5.com"
 #property version   "1.00"
 //---
-#include "../TL_CSetEntryObjects.mqh"
 #include "../../Include/TL_CGlobalVariables.mqh"
 #include "../../Include/TL_CTradingCalculator.mqh"
 #include "../../Objects/TL_CLabel.mqh"
@@ -26,7 +25,7 @@ class CSetLineLabel
       ENUM_ANCHOR_POINT anchor;
       ENUM_BASE_CORNER  corner;
       //---
-      double gvSwitchTradeLine;
+      SWITCH_TRADELINE gvSwitchTradeLine;
       //---
       CSetEntryObjects base;
       CGlobalVariables gv;

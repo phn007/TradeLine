@@ -5,51 +5,67 @@
 class CEntryLine : public CSetTradeLine
 {
    private:
-      void GetProperties();
+      double GetEntryPrice(double stop);
+      void   GetProperties();
    public:
       CEntryLine();
       ~CEntryLine(void){}; 
       //---
-      void SwitchOnOff();           
+      //void SwitchOnOff();           
 };
 //+------------------------------------------------------------------+
 //| Chlid Class : Construct                                          |
 //+------------------------------------------------------------------+
 CEntryLine::CEntryLine()
 {
-   gv.GetVars();
+//Print(__FUNCTION__);
+//*
+   lineName = ENTRYLINE_NAME;
+   clr      = ENTRYLINE_COLOR;
    //---
-   lineName = base.entryLine;
    GetProperties();
+   gvSwitchTradeLine = gv.getSwitchTradeLine();
+   
+   Print(__FUNCTION__," lineName: ", lineName,
+   " | linePrice: ",linePrice,
+   " | gvSwitchTradeLine: ",EnumToString(gv.getSwitchTradeLine()));
+   //*/
 }
 //+------------------------------------------------------------------+
 //| Method : GetProperties                                           |
 //+------------------------------------------------------------------+
 void CEntryLine::GetProperties(void)
 {
-   double stopPrice = ObjectGetDouble(0,base.stopLine,OBJPROP_PRICE);
+   SWICTH_METHOD tradeMethod = gv.getSwitchMethod();
    //---
-   if(gv.switchMethod == 1) // ByMarket
+   if(tradeMethod == MARKET) // instant order
    {
-      linePrice = GetEntryPrice(stopPrice);
+      Print(__FUNCTION__," getSwitchMethod() : ",EnumToString(tradeMethod));
       //---
-      text       = "#Entry : ByMarket";
-      clr        = clrRoyalBlue;
-      select     = false;
+      double stopPrice = ObjectGetDouble(0,STOPLINE_NAME,OBJPROP_PRICE);
+      linePrice = GetEntryPrice(stopPrice);
+      text      = ENTRYLINE_MARKET_TEXT;
+      select    = ENTRYLINE_UNSELECT;
    }
-   else if(gv.switchMethod == 0) // Pending
+   else if(tradeMethod == PENDING) // pending order
    {
-      linePrice = gv.entryPrice != NULL ? gv.entryPrice : GetEntryPrice(stopPrice);
-      text       = "#Entry : Pending";
-      clr        = clrRoyalBlue;
-      select     = true;   
+      Print(__FUNCTION__," getSwitchMethod() : ",EnumToString(tradeMethod));
+      double stopPrice = gv.getStopLinePrice();
+      double entryPrice = gv.getEntryLinePrice();
+      linePrice = entryPrice != 0 ? entryPrice : GetEntryPrice(stopPrice);
+      text      = ENTRYLINE_PENDING_TEXT;  
+      select    = ENTRYLINE_SELECT;
    }
 }
 //+------------------------------------------------------------------+
-//| Method : SwitchOnOff                                             |
+//| Method: GetEntryPrice                                            |
 //+------------------------------------------------------------------+
-void CEntryLine::SwitchOnOff(void)
+double CEntryLine::GetEntryPrice(double stop)
 {
-   gvSwitchTradeLine = gv.switchTradeLine;
-   CSetTradeLine::SwitchOnOff();
+   double bid = SymbolInfoDouble(Symbol(),SYMBOL_BID);
+   double ask = SymbolInfoDouble(Symbol(),SYMBOL_ASK);
+   //---
+   if       (stop > ask && stop > bid) return bid;
+   else if  (stop < ask && stop < bid) return ask;
+   else                  return -1;
 }

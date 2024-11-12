@@ -14,31 +14,47 @@
 class CStopLine : public CSetTradeLine
 {
    private:
-
+      double GetStopPrice (double gvStop);        
    public:
       CStopLine();
      ~CStopLine(){};
-     //---
-     void SwitchOnOff();
 };
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
 CStopLine::CStopLine()
 {
-   gv.GetVars();
-   lineName = base.stopLine;   
+   //Print(__FUNCTION__);
+//*
+   lineName = STOPLINE_NAME;  
    //---
-   text     = "#SL";
-   clr      = clrLime;
-   select   = true;   
+   text     = STOPLINE_TEXT;
+   clr      = STOPLINE_COLOR;
+   select   = STOPLINE_SELECT;   
+   
+   linePrice         = GetStopPrice(gv.getStopLinePrice());
+   gvSwitchTradeLine = gv.getSwitchTradeLine();
+   
+   Print(__FUNCTION__," lineName: ", lineName,
+   " | linePrice: ",linePrice,
+   " | gvSwitchTradeLine: ",EnumToString(gv.getSwitchTradeLine()));
+   //*/
 }
 //+------------------------------------------------------------------+
-void CStopLine::SwitchOnOff(void)
+//| Method: GetStopPrice                                             |
+//+------------------------------------------------------------------+
+double CStopLine::GetStopPrice(double gvStop)
 {
-   Print(__FUNCTION__);
-   linePrice         = GetStopPrice(gv.stopPrice);
-   gvSwitchTradeLine = gv.switchTradeLine;
-   //---
-   CSetTradeLine::SwitchOnOff();
+   //Print(__FUNCTION__," gvStop: ",gvStop);
+   if(gvStop == 0)
+   {
+      double point = SymbolInfoDouble(Symbol(),SYMBOL_POINT);
+      double bid   = SymbolInfoDouble(Symbol(),SYMBOL_BID);
+      //---
+      return NormalizeDouble(bid + 10 * point,Digits());
+   }
+   else
+   {
+      return gvStop;
+   }   
 }

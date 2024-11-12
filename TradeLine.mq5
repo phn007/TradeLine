@@ -7,17 +7,17 @@
 #property link      "https://www.mql5.com"
 #property version   "1.00"
 //---
-#include "Include/TL_CGlobalVariables.mqh"
-#include "Entry/TL_CSetEntryObjects.mqh"
-#include "Entry/Lines/TL_CSetTradeLine.mqh";
-#include "Entry/Lines/TL_CStopLine.mqh"
-#include "Entry/Lines/TL_CEntryLine.mqh"
-#include "Entry/Labels/TL_CSetLineLabel.mqh"
-#include "Entry/Labels/TL_CStopLabel.mqh"
-#include "Entry/Labels/TL_CEntryLineLabel.mqh"
+#include "Defines\Defines.mqh"
+#include "Include\TL_CGlobalVariables.mqh"
+#include "Entry\Lines\TL_CSetTradeLine.mqh";
+#include "Entry\Lines\TL_CStopLine.mqh"
+#include "Entry\Lines\TL_CEntryLine.mqh"
+//#include "Entry\Labels\TL_CSetLineLabel.mqh"
+//#include "Entry\Labels\TL_CStopLabel.mqh"
+//#include "Entry\Labels\TL_CEntryLineLabel.mqh"
 
-//--- Key IDs
-#define KEY_SWITCH_ONOFF_TRADELINE 49  //ChartEvent_Keydown #1
+//---
+CGlobalVariables gv;
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
@@ -26,7 +26,9 @@ int OnInit()
 //---
    ChartSetInteger(0,CHART_EVENT_OBJECT_CREATE,1);
    ChartSetInteger(0,CHART_EVENT_OBJECT_DELETE,1);
-   ChartSetInteger(0,CHART_EVENT_MOUSE_MOVE,1);      
+   ChartSetInteger(0,CHART_EVENT_MOUSE_MOVE,1);   
+   
+   //gv.SetInitSwitchMethod(); //ByMarket   
 //---
    return(INIT_SUCCEEDED);
   }
@@ -45,20 +47,18 @@ void OnTick()
   {
 //---
    //--- EntryLine
-   CSetTradeLine *line = new CEntryLine();
-   line.UpdateLine();
-   delete line;
+   //CSetTradeLine *line = new CEntryLine();
+   //line.UpdateLine();
+   //delete line;
    //--- StopLabel
-   CSetLineLabel *stopLabel = new CStopLabel();
-   stopLabel.UpdateLabel();
+   //CSetLineLabel *stopLabel  = new CStopLabel();
+   //stopLabel.UpdateLabel();
    //--- EntryLabel
-   CSetLineLabel *entryLabel = new CEntryLineLabel();
-   entryLabel.UpdateLabel();
+   //CSetLineLabel *entryLabel = new CEntryLineLabel();
+   //entryLabel.UpdateLabel();
    //---
-   delete(stopLabel);
-   delete(entryLabel);
-   
-
+   //delete(stopLabel);
+   //delete(entryLabel);
 }
 //+------------------------------------------------------------------+
 //| Trade function                                                   |
@@ -81,38 +81,61 @@ void OnChartEvent(const int id,
    {
       switch((int)lparam)
       {
-         case KEY_SWITCH_ONOFF_TRADELINE: //#1
+         case KEY_SWITCH_TRADELINE: //#1
          {
-            Print("Pressed #1: KEY_SWITCH_ONOFF_TRADELINE"); 
-            //--- GlobalVariables
-            CGlobalVariables gv;
-            gv.SetInitSwitchMethod();     //ByMarket
-            gv.SetSwitchOnOff(TRADELINE); //On
+            Print("Pressed #1: KEY_SWITCH_TRADELINE"); 
             //--- TradeLine
+            CSetTradeLine *gvSwitch = new CSetTradeLine();
+            gvSwitch.SetSwitchTradeLine();
+            //---
             CSetTradeLine *entryLine  = new CEntryLine();
             entryLine.SwitchOnOff();
             CSetTradeLine *stopLine   = new CStopLine();
             stopLine.SwitchOnOff();
             //--- TradeLineLabel
-            CSetLineLabel *stopLabel  = new CStopLabel();
-            stopLabel.SwitchOnOff();
-            CSetLineLabel *entryLabel = new CEntryLineLabel();
-            entryLabel.SwitchOnOff();
+            //CSetLineLabel *stopLabel  = new CStopLabel();
+            //stopLabel.SwitchOnOff();
+            //CSetLineLabel *entryLabel = new CEntryLineLabel();
+            //entryLabel.SwitchOnOff();
             //---
-            delete(entryLine);
+            delete(gvSwitch);
             delete(stopLine);
-            delete(stopLabel);
-            delete(entryLabel);
+            delete(entryLine);
+            //delete(gvLineOnOff);
+            //delete(stopLabel);
+            //delete(entryLabel);
             //---
             ChartRedraw(0);        
          }   
-         break;  
+         break; 
+         case KEY_SWITCH_TRADE_METHOD: //#2
+         {
+            Print("Pressed #2: KEY_SWITCH_TRADE_METHOD"); 
+            CSetTradeLine *gvSwitch = new CSetTradeLine();
+            gvSwitch.SetSwitchTradeMethod();
+            //---
+            CSetTradeLine *entryLine = new CEntryLine();
+            entryLine.SetProperties();
+            //---
+            delete(gvSwitch);
+            delete(entryLine);
+            //---
+            ChartRedraw(0);
+         }
+         break;
          default:Print("Pressed unlisted key");
       }
    }
    if(id == CHARTEVENT_OBJECT_DRAG)
    {
-   
+      CSetTradeLine *stopLine = new CStopLine();
+      stopLine.SetCurrentTradelinePriceForGV();
+      //---
+      CSetTradeLine *entryLine =new CEntryLine();
+      entryLine.SetCurrentTradelinePriceForGV();
+      //---
+      delete(stopLine);
+      delete(entryLine);
    }
 }
 //+------------------------------------------------------------------+
