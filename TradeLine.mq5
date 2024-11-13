@@ -9,6 +9,8 @@
 //---
 #include "Defines\Defines.mqh"
 #include "Include\TL_CGlobalVariables.mqh"
+#include "Include\TL_CValidateMouseMove.mqh"
+//---
 #include "Entry\Lines\TL_CSetTradeLine.mqh";
 #include "Entry\Lines\TL_CStopLine.mqh"
 #include "Entry\Lines\TL_CEntryLine.mqh"
@@ -168,6 +170,26 @@ void OnChartEvent(const int id,
       delete(entryLabel);
       delete(stopLabel);
       ChartRedraw(0);
+   }
+   if(id == CHARTEVENT_MOUSE_MOVE)
+   {
+      if((int)sparam == MOUSEMOVE_ACTION_CLICK_DRAG)
+      {
+         CHLineMouseMove stopLine (dparam,STOPLINE_NAME); 
+         CHLineMouseMove entryLine(dparam,ENTRYLINE_NAME);
+         //---
+         if(stopLine.MoveAllowed()  == true || 
+            entryLine.MoveAllowed() == true )
+         {
+            CSetLineLabel *stopLabel = new CStopLabel();
+            stopLabel.UpdateLabel();
+            CSetLineLabel *entryLabel = new CEntryLineLabel();
+            entryLabel.UpdateLabel();
+            //---         
+            delete(stopLabel);
+            delete(entryLabel);
+         }               
+      }
    }
 }
 //+------------------------------------------------------------------+
