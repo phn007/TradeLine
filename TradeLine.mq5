@@ -114,8 +114,8 @@ void OnChartEvent(const int id,
             CSetTradeLine *gvSwitch = new CSetTradeLine();
             gvSwitch.SetSwitchTradeMethod();
             //---
-            CSetTradeLine *entryLine = new CEntryLine();
-            entryLine.SetProperties();
+            CSetTradeLine *entryLine = new CEntryLine(SWITCH_TRADE_METHOD);
+            entryLine.SwitchTradeMethod();
             //---
             delete(gvSwitch);
             delete(entryLine);
@@ -131,6 +131,9 @@ void OnChartEvent(const int id,
             //---
             CSetTradeLine *entryLine = new CEntryLine(RESET_TRADELINE_PRICE);
             entryLine.ResetTradeLine();
+            //---
+            delete(stopLine);
+            delete(entryLine);
             //---
             ChartRedraw(0);
          }

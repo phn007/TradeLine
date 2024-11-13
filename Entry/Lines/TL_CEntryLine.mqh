@@ -35,7 +35,7 @@ CEntryLine::CEntryLine()
 //---
 CEntryLine::CEntryLine(TRADELINE_CONSTRUCT con)
 {
-   lineName  = ENTRYLINE_NAME;
+   lineName = ENTRYLINE_NAME;
    //---
    double         stopPrice  = ObjectGetDouble(0,STOPLINE_NAME,OBJPROP_PRICE);
    SWICTH_METHOD tradeMethod = gv.getSwitchMethod();
@@ -50,14 +50,41 @@ CEntryLine::CEntryLine(TRADELINE_CONSTRUCT con)
       {
          linePrice = GetEntryPrice(stopPrice);  
       }
+      else if(tradeMethod == PENDING)
+      {
+         linePrice = gv.getEntryLinePrice();
+      }
    }
-   //---
+   else if( con == SWITCH_TRADE_METHOD)
+   {
+      linePrice = GetEntryPrice(stopPrice);
+      CSetTradeLine::SetCurrentTradelinePriceForGV();
+      //---
+      SWICTH_METHOD tradeMethod = gv.getSwitchMethod();
+      if(tradeMethod == MARKET) // instant order
+      {
+         text      = ENTRYLINE_MARKET_TEXT;
+         select    = ENTRYLINE_UNSELECT;
+         //---
+         double stopPrice = ObjectGetDouble(0,STOPLINE_NAME,OBJPROP_PRICE);
+         linePrice = GetEntryPrice(stopPrice);
+         
+      }
+      else if(tradeMethod == PENDING) // pending order
+      {
+         text      = ENTRYLINE_PENDING_TEXT;  
+         select    = ENTRYLINE_SELECT;
+         //---
+         linePrice = gv.getEntryLinePrice();
+      }
+   }
+   /*
    Print(__FUNCTION__,
    " Constructor: ",EnumToString(con),
    " | TradeMethod: ",EnumToString(tradeMethod),
    " | lineName: ",lineName,
    " | price: ",linePrice);
-   //---
+   //*/
 
 }
 //+------------------------------------------------------------------+

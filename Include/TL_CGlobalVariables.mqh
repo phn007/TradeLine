@@ -130,7 +130,7 @@ double CGlobalVariables::getEntryLinePrice(void)
 SWICTH_METHOD CGlobalVariables::getSwitchMethod()
 {
    switchMethod = GlobalVariableGet(switchMethodName);
-   Print(__FUNCTION__," switchMethod: ",switchMethod);
+   //Print(__FUNCTION__," switchMethod: ",switchMethod);
    //---
    
    if(switchMethod == 0)        return PENDING;

@@ -35,11 +35,13 @@ class CSetTradeLine
      void SwitchOnOff();
      void UpdateLine();
      void SetCurrentTradelinePriceForGV();
-     void SetSwitchTradeLine();
-     void SetSwitchTradeMethod();
+     void SetSwitchTradeLine();   //Global Variable
+     void SetSwitchTradeMethod(); //Global Variable
      void SetProperties();
      //---
      void ResetTradeLine();
+     void SwitchTradeMethod();
+     
 };
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -113,7 +115,7 @@ void CSetTradeLine::DeleteLine(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::UpdateLine(void)
 {
-   Print(__FUNCTION__);
+   //Print(__FUNCTION__);
    CHLine line(lineName);
    line.SetPrice1(linePrice);
 }
@@ -134,4 +136,16 @@ void CSetTradeLine::ResetTradeLine(void)
    line.SetPrice1(linePrice);
    //---
    SetCurrentTradelinePriceForGV();
+}
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void CSetTradeLine::SwitchTradeMethod(void)
+{
+   Print(__FUNCTION__);
+   CHLine line(lineName);
+   line.SetText(text);
+   line.SetSelectable(select);
+   line.SetSelected(select);
+   line.SetPrice1(linePrice);
 }
