@@ -145,9 +145,9 @@ SWITCH_TRADELINE CGlobalVariables::getSwitchTradeLine(void)
 {
    switchTradeLine = GlobalVariableGet(switchTradeLineName);
    //---
-   if(switchTradeLine == 0)      return DELETE_TRADELINE;
-   else if(switchTradeLine == 1) return CREATE_TRADELINE;
-   else                          return IGNORE;
+   if(switchTradeLine == 0)      return SWITCH_TRADELINE_OFF;
+   else if(switchTradeLine == 1) return SWITCH_TRADELINE_ON;
+   else                          return SWITCH_TRADELINE_NONE;
 }
 //+------------------------------------------------------------------+
 //|                                                                  |

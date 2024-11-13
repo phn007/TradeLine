@@ -62,13 +62,13 @@ void CSetTradeLine::SetSwitchTradeMethod(void)
 void CSetTradeLine::SwitchOnOff(void)
 {
    //---
-   if(gvSwitchTradeLine == CREATE_TRADELINE)
+   if(gvSwitchTradeLine == SWITCH_TRADELINE_ON)
    {
       Print(__FUNCTION__, " gvSwitchTradeLine: ",EnumToString(gvSwitchTradeLine)," | ",lineName);
       CreateLine();
       SetProperties();
    }
-   else if(gvSwitchTradeLine == DELETE_TRADELINE)
+   else if(gvSwitchTradeLine == SWITCH_TRADELINE_OFF)
    {
       Print(__FUNCTION__, " gvSwitchTradeLine: ",EnumToString(gvSwitchTradeLine)," | ",lineName);
       DeleteLine();
