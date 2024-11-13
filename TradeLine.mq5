@@ -50,15 +50,11 @@ void OnTick()
    CSetTradeLine *line = new CEntryLine(UPDATE_TRADELINE_PRICE);
    line.UpdateLine();
    delete line;
-   //--- StopLabel
-   //CSetLineLabel *stopLabel  = new CStopLabel();
-   //stopLabel.UpdateLabel();
    //--- EntryLabel
-   //CSetLineLabel *entryLabel = new CEntryLineLabel();
-   //entryLabel.UpdateLabel();
+   CSetLineLabel *entryLabel = new CEntryLineLabel();
+   entryLabel.UpdateLabel();
    //---
-   //delete(stopLabel);
-   //delete(entryLabel);
+   delete(entryLabel);
 }
 //+------------------------------------------------------------------+
 //| Trade function                                                   |
