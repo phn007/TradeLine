@@ -7,8 +7,6 @@ class CEntryLineLabel : public CSetLineLabel
    public:
       CEntryLineLabel();
       ~CEntryLineLabel(void){};
-      //---
-      void SwitchOnOff();//override
 };
 //+------------------------------------------------------------------+
 //| Child Class :  Construct                                         |
@@ -17,15 +15,15 @@ CEntryLineLabel::CEntryLineLabel()
 {
    Print(__FUNCTION__);
    //---
-   labelName = base.entryLine + "_Label";
-   gvSwitchTradeLine = gv.switchTradeLine;
+   labelName = ENTRYLINE_NAME + "_Label";
+   gvSwitchTradeLine = gv.getSwitchTradeLine();
    //---
-   if(ObjectFind(0,base.stopLine) >= 0 && ObjectFind(0,base.entryLine) >= 0)
+   if(ObjectFind(0,STOPLINE_NAME) >= 0 && ObjectFind(0,ENTRYLINE_NAME) >= 0)
    {
-      double stopPrice  = ObjectGetDouble(0,base.stopLine ,OBJPROP_PRICE);
-      double entryPrice = ObjectGetDouble(0,base.entryLine,OBJPROP_PRICE);
+      double stopPrice  = ObjectGetDouble(0,STOPLINE_NAME ,OBJPROP_PRICE);
+      double entryPrice = ObjectGetDouble(0,ENTRYLINE_NAME,OBJPROP_PRICE);
       //---
-      CTradingCalculator cal(stopPrice,entryPrice,base.risk);
+      CTradingCalculator cal(stopPrice,entryPrice,MONEY_RISK);
       //---
       string orderType = cal.sOrderType;
       double lotsize   = NormalizeDouble(cal.lotsize,2);
@@ -41,11 +39,5 @@ CEntryLineLabel::CEntryLineLabel()
    }
    //---
 }
-//+------------------------------------------------------------------+
-//| Method : SwitchOnOff                                             |
-//+------------------------------------------------------------------+
-void CEntryLineLabel::SwitchOnOff(void)
-{
-   CSetLineLabel::SwitchOnOff();
-}
+
 

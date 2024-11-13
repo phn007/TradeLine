@@ -12,9 +12,9 @@
 #include "Entry\Lines\TL_CSetTradeLine.mqh";
 #include "Entry\Lines\TL_CStopLine.mqh"
 #include "Entry\Lines\TL_CEntryLine.mqh"
-//#include "Entry\Labels\TL_CSetLineLabel.mqh"
-//#include "Entry\Labels\TL_CStopLabel.mqh"
-//#include "Entry\Labels\TL_CEntryLineLabel.mqh"
+#include "Entry\Labels\TL_CSetLineLabel.mqh"
+#include "Entry\Labels\TL_CStopLabel.mqh"
+#include "Entry\Labels\TL_CEntryLineLabel.mqh"
 
 //---
 CGlobalVariables gv;
@@ -93,17 +93,16 @@ void OnChartEvent(const int id,
             CSetTradeLine *stopLine   = new CStopLine();
             stopLine.SwitchOnOff();
             //--- TradeLineLabel
-            //CSetLineLabel *stopLabel  = new CStopLabel();
-            //stopLabel.SwitchOnOff();
-            //CSetLineLabel *entryLabel = new CEntryLineLabel();
-            //entryLabel.SwitchOnOff();
+            CSetLineLabel *stopLabel  = new CStopLabel();
+            stopLabel.SwitchOnOff();
+            CSetLineLabel *entryLabel = new CEntryLineLabel();
+            entryLabel.SwitchOnOff();
             //---
             delete(gvSwitch);
             delete(stopLine);
             delete(entryLine);
-            //delete(gvLineOnOff);
-            //delete(stopLabel);
-            //delete(entryLabel);
+            delete(stopLabel);
+            delete(entryLabel);
             //---
             ChartRedraw(0);        
          }   
@@ -120,6 +119,10 @@ void OnChartEvent(const int id,
             delete(gvSwitch);
             delete(entryLine);
             //---
+            CSetLineLabel *entryLabel = new CEntryLineLabel();
+            entryLabel.UpdateLabel();
+            delete(entryLabel);
+            //---
             ChartRedraw(0);
          }
          break;
@@ -135,6 +138,14 @@ void OnChartEvent(const int id,
             delete(stopLine);
             delete(entryLine);
             //---
+            CSetLineLabel *stopLabel = new CStopLabel();
+            stopLabel.UpdateLabel();
+            CSetLineLabel *entryLabel = new CEntryLineLabel();
+            entryLabel.UpdateLabel();
+            //---
+            delete(entryLabel);
+            delete(stopLabel);
+            //---            
             ChartRedraw(0);
          }
          break;
@@ -143,6 +154,7 @@ void OnChartEvent(const int id,
    }
    if(id == CHARTEVENT_OBJECT_DRAG)
    {
+      Print("CHARTEVENT_OBJECT_DRAG");
       CSetTradeLine *stopLine = new CStopLine();
       stopLine.SetCurrentTradelinePriceForGV();
       //---
@@ -151,6 +163,15 @@ void OnChartEvent(const int id,
       //---
       delete(stopLine);
       delete(entryLine);
+      //---
+      CSetLineLabel *stopLabel = new CStopLabel();
+      stopLabel.UpdateLabel();
+      CSetLineLabel *entryLabel = new CEntryLineLabel();
+      entryLabel.UpdateLabel();
+      //---
+      delete(entryLabel);
+      delete(stopLabel);
+      ChartRedraw(0);
    }
 }
 //+------------------------------------------------------------------+

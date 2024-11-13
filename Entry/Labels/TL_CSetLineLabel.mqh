@@ -27,7 +27,6 @@ class CSetLineLabel
       //---
       SWITCH_TRADELINE gvSwitchTradeLine;
       //---
-      CSetEntryObjects base;
       CGlobalVariables gv;
    //--- Method
    protected:
@@ -38,10 +37,10 @@ class CSetLineLabel
    private:
       
    public:
-      CSetLineLabel(void){ Print(__FUNCTION__); }
+      CSetLineLabel(void){}
       ~CSetLineLabel(void){}
       //---
-      virtual void SwitchOnOff();
+      void SwitchOnOff();
       void UpdateLabel();
 };
 //+------------------------------------------------------------------+
@@ -82,21 +81,23 @@ void CSetLineLabel::SetProperties(void)
 void CSetLineLabel::SwitchOnOff()
 {
    Print(__FUNCTION__," gvSwitchTradeLine",gvSwitchTradeLine);
-   if(gvSwitchTradeLine == 1)
+   if(gvSwitchTradeLine == SWITCH_TRADELINE_ON)
    {
       CreateLabel();
    }
-   else
+   else if(gvSwitchTradeLine == SWITCH_TRADELINE_OFF)
    {
       DeleteLabel();
    }
+
 }
 //+------------------------------------------------------------------+
 //| Method : UpdateLabel                                             |
 //+------------------------------------------------------------------+
 void CSetLineLabel::UpdateLabel(void)
 {
-   if(gvSwitchTradeLine == 1)
+   Print(__FUNCTION__," | labelName: ",labelName," | text: ",text);
+   if(gvSwitchTradeLine == SWITCH_TRADELINE_ON)
    {
       CLabel label(labelName);
       label.SetText(text);

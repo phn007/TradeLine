@@ -10,7 +10,8 @@
 #define ENTRYLINE_SELECT         true
 #define ENTRYLINE_MARKET_TEXT    "#Entry : ByMarket"
 #define ENTRYLINE_PENDING_TEXT   "#Entry : Pending"
-
+//---
+#define MONEY_RISK 5
 //---
 enum TRADELINE_CONSTRUCT
 {

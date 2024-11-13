@@ -15,27 +15,25 @@ class CStopLabel : public CSetLineLabel
 {
    public:
       CStopLabel();
-      ~CStopLabel(void){};
+     ~CStopLabel(void){};
       //---
-      void SwitchOnOff();//override
 };
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
 CStopLabel::CStopLabel()
 { 
+   
    //---
-   labelName         = base.stopLine + "_Label";
-   gvSwitchTradeLine = gv.switchTradeLine;
+   labelName         = STOPLINE_NAME + "_Label";
+   gvSwitchTradeLine = gv.getSwitchTradeLine();
    //---
-
-  
-   if(ObjectFind(0,base.stopLine) >= 0 && ObjectFind(0,base.entryLine) >= 0)
+   if(ObjectFind(0,STOPLINE_NAME) >= 0 && ObjectFind(0,ENTRYLINE_NAME) >= 0)
    {
-      double stopPrice  = ObjectGetDouble(0,base.stopLine ,OBJPROP_PRICE);
-      double entryPrice = ObjectGetDouble(0,base.entryLine,OBJPROP_PRICE);
+      double stopPrice  = ObjectGetDouble(0,STOPLINE_NAME ,OBJPROP_PRICE);
+      double entryPrice = ObjectGetDouble(0,ENTRYLINE_NAME,OBJPROP_PRICE);
       //---
-      CTradingCalculator cal(stopPrice,entryPrice,base.risk);
+      CTradingCalculator cal(stopPrice,entryPrice,MONEY_RISK);
       //---
       double points    = NormalizeDouble(cal.points,2);
       double moneyRisk = NormalizeDouble(cal.moneyRisk,2);
@@ -48,10 +46,6 @@ CStopLabel::CStopLabel()
       clr         = clrWheat;
       fontSize    = 9;
       //---
+      Print(__FUNCTION__," text: ",text);
    }
 }
-void CStopLabel::SwitchOnOff(void)
-{
-   CSetLineLabel::SwitchOnOff();
-}
-
