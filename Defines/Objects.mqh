@@ -10,3 +10,10 @@
 #define ENTRYLINE_SELECT         true
 #define ENTRYLINE_MARKET_TEXT    "#Entry : ByMarket"
 #define ENTRYLINE_PENDING_TEXT   "#Entry : Pending"
+
+//---
+enum TRADELINE_CONSTRUCT
+{
+   RESET_TRADELINE_PRICE,
+   UPDATE_TRADELINE_PRICE
+};

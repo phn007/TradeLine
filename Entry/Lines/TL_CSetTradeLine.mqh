@@ -32,14 +32,14 @@ class CSetTradeLine
       CSetTradeLine(){};
      ~CSetTradeLine(){};
      //---
-     virtual void SwitchOnOff();
+     void SwitchOnOff();
      void UpdateLine();
      void SetCurrentTradelinePriceForGV();
      void SetSwitchTradeLine();
      void SetSwitchTradeMethod();
-     //---
      void SetProperties();
      //---
+     void ResetTradeLine();
 };
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -113,11 +113,9 @@ void CSetTradeLine::DeleteLine(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::UpdateLine(void)
 {
-   //Print(__FUNCTION__);
-   if(gvSwitchTradeLine == 0)
-   {
-      SetProperties();
-   }
+   Print(__FUNCTION__);
+   CHLine line(lineName);
+   line.SetPrice1(linePrice);
 }
 //+------------------------------------------------------------------+
 //| Update Current TradeLine Price to GV                             |
@@ -125,4 +123,15 @@ void CSetTradeLine::UpdateLine(void)
 void CSetTradeLine::SetCurrentTradelinePriceForGV(void)
 {
    gv.SetPriceLineVariable(lineName);
+}
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void CSetTradeLine::ResetTradeLine(void)
+{
+   Print(__FUNCTION__," name: ", lineName," | price: ", linePrice);
+   CHLine line(lineName);
+   line.SetPrice1(linePrice);
+   //---
+   SetCurrentTradelinePriceForGV();
 }

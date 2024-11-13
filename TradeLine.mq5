@@ -47,9 +47,9 @@ void OnTick()
   {
 //---
    //--- EntryLine
-   //CSetTradeLine *line = new CEntryLine();
-   //line.UpdateLine();
-   //delete line;
+   CSetTradeLine *line = new CEntryLine(UPDATE_TRADELINE_PRICE);
+   line.UpdateLine();
+   delete line;
    //--- StopLabel
    //CSetLineLabel *stopLabel  = new CStopLabel();
    //stopLabel.UpdateLabel();
@@ -123,6 +123,18 @@ void OnChartEvent(const int id,
             ChartRedraw(0);
          }
          break;
+         case KEY_RESET_TRADELINE: //#3
+         {
+            Print("Pressed #3: KEY_RESET_TRADELINE");
+            CSetTradeLine * stopLine = new CStopLine(RESET_TRADELINE_PRICE);
+            stopLine.ResetTradeLine();
+            //---
+            CSetTradeLine *entryLine = new CEntryLine(RESET_TRADELINE_PRICE);
+            entryLine.ResetTradeLine();
+            //---
+            ChartRedraw(0);
+         }
+         break;
          default:Print("Pressed unlisted key");
       }
    }
@@ -131,7 +143,7 @@ void OnChartEvent(const int id,
       CSetTradeLine *stopLine = new CStopLine();
       stopLine.SetCurrentTradelinePriceForGV();
       //---
-      CSetTradeLine *entryLine =new CEntryLine();
+      CSetTradeLine *entryLine = new CEntryLine();
       entryLine.SetCurrentTradelinePriceForGV();
       //---
       delete(stopLine);

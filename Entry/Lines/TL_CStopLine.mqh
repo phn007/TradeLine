@@ -17,14 +17,29 @@ class CStopLine : public CSetTradeLine
       double GetStopPrice (double gvStop);        
    public:
       CStopLine();
+      CStopLine(TRADELINE_CONSTRUCT con);
      ~CStopLine(){};
+     //---
 };
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+CStopLine::CStopLine(TRADELINE_CONSTRUCT con)
+{
+   Print(__FUNCTION__," Constructor: ",EnumToString(con));
+   lineName = STOPLINE_NAME; 
+   
+   double point = SymbolInfoDouble(Symbol(),SYMBOL_POINT);
+   double bid   = SymbolInfoDouble(Symbol(),SYMBOL_BID);
+   //---
+   linePrice    = NormalizeDouble(bid + 10 * point,Digits());
+}
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
 CStopLine::CStopLine()
 {
-   //Print(__FUNCTION__);
+   
 //*
    lineName = STOPLINE_NAME;  
    //---

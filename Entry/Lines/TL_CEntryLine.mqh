@@ -9,12 +9,13 @@ class CEntryLine : public CSetTradeLine
       void   GetProperties();
    public:
       CEntryLine();
+      CEntryLine(TRADELINE_CONSTRUCT con);
       ~CEntryLine(void){}; 
       //---
-      //void SwitchOnOff();           
+      //void ResetTradeLine();           
 };
 //+------------------------------------------------------------------+
-//| Chlid Class : Construct                                          |
+// Construct                                                         |
 //+------------------------------------------------------------------+
 CEntryLine::CEntryLine()
 {
@@ -30,6 +31,34 @@ CEntryLine::CEntryLine()
    " | linePrice: ",linePrice,
    " | gvSwitchTradeLine: ",EnumToString(gv.getSwitchTradeLine()));
    //*/
+}
+//---
+CEntryLine::CEntryLine(TRADELINE_CONSTRUCT con)
+{
+   lineName  = ENTRYLINE_NAME;
+   //---
+   double         stopPrice  = ObjectGetDouble(0,STOPLINE_NAME,OBJPROP_PRICE);
+   SWICTH_METHOD tradeMethod = gv.getSwitchMethod();
+   //---
+   if(con == RESET_TRADELINE_PRICE)
+   { 
+      linePrice = GetEntryPrice(stopPrice);
+   }
+   else if(con == UPDATE_TRADELINE_PRICE)
+   {
+      if(tradeMethod == MARKET)
+      {
+         linePrice = GetEntryPrice(stopPrice);  
+      }
+   }
+   //---
+   Print(__FUNCTION__,
+   " Constructor: ",EnumToString(con),
+   " | TradeMethod: ",EnumToString(tradeMethod),
+   " | lineName: ",lineName,
+   " | price: ",linePrice);
+   //---
+
 }
 //+------------------------------------------------------------------+
 //| Method : GetProperties                                           |
@@ -69,3 +98,4 @@ double CEntryLine::GetEntryPrice(double stop)
    else if  (stop < ask && stop < bid) return ask;
    else                  return -1;
 }
+
