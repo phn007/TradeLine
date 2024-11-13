@@ -46,6 +46,6 @@ CStopLabel::CStopLabel()
       clr         = clrWheat;
       fontSize    = 9;
       //---
-      Print(__FUNCTION__," text: ",text);
+      //Print(__FUNCTION__," text: ",text);
    }
 }

@@ -20,13 +20,13 @@ class CEntryLine : public CSetTradeLine
 CEntryLine::CEntryLine()
 {
 //Print(__FUNCTION__);
-//*
+
    lineName = ENTRYLINE_NAME;
    clr      = ENTRYLINE_COLOR;
    //---
    GetProperties();
    gvSwitchTradeLine = gv.getSwitchTradeLine();
-   
+   /*
    Print(__FUNCTION__," lineName: ", lineName,
    " | linePrice: ",linePrice,
    " | gvSwitchTradeLine: ",EnumToString(gv.getSwitchTradeLine()));
@@ -35,10 +35,12 @@ CEntryLine::CEntryLine()
 //---
 CEntryLine::CEntryLine(TRADELINE_CONSTRUCT con)
 {
-   lineName = ENTRYLINE_NAME;
-   //---
-   double         stopPrice  = ObjectGetDouble(0,STOPLINE_NAME,OBJPROP_PRICE);
-   SWICTH_METHOD tradeMethod = gv.getSwitchMethod();
+   SWITCH_TRADELINE tradeline = gv.getSwitchTradeLine();
+   if(tradeline != SWITCH_TRADELINE_ON) return;
+   //---   
+   SWICTH_METHOD tradeMethod  = gv.getSwitchMethod();
+   lineName                   = ENTRYLINE_NAME;
+   double stopPrice           = ObjectGetDouble(0,STOPLINE_NAME,OBJPROP_PRICE);
    //---
    if(con == RESET_TRADELINE_PRICE)
    { 
@@ -53,14 +55,16 @@ CEntryLine::CEntryLine(TRADELINE_CONSTRUCT con)
       else if(tradeMethod == PENDING)
       {
          linePrice = gv.getEntryLinePrice();
+         Print(__FUNCTION__,
+         " | con: ",EnumToString(con),
+         " | tradeMethod: ",EnumToString(tradeMethod),
+         " | lineName : ", lineName,
+         " | linePrice: ",linePrice);
       }
    }
    else if( con == SWITCH_TRADE_METHOD)
    {
-      linePrice = GetEntryPrice(stopPrice);
-      CSetTradeLine::SetCurrentTradelinePriceForGV();
       //---
-      SWICTH_METHOD tradeMethod = gv.getSwitchMethod();
       if(tradeMethod == MARKET) // instant order
       {
          text      = ENTRYLINE_MARKET_TEXT;
@@ -68,7 +72,6 @@ CEntryLine::CEntryLine(TRADELINE_CONSTRUCT con)
          //---
          double stopPrice = ObjectGetDouble(0,STOPLINE_NAME,OBJPROP_PRICE);
          linePrice = GetEntryPrice(stopPrice);
-         
       }
       else if(tradeMethod == PENDING) // pending order
       {
@@ -96,7 +99,7 @@ void CEntryLine::GetProperties(void)
    //---
    if(tradeMethod == MARKET) // instant order
    {
-      Print(__FUNCTION__," getSwitchMethod() : ",EnumToString(tradeMethod));
+      //Print(__FUNCTION__," getSwitchMethod() : ",EnumToString(tradeMethod));
       //---
       double stopPrice = ObjectGetDouble(0,STOPLINE_NAME,OBJPROP_PRICE);
       linePrice = GetEntryPrice(stopPrice);
@@ -105,7 +108,7 @@ void CEntryLine::GetProperties(void)
    }
    else if(tradeMethod == PENDING) // pending order
    {
-      Print(__FUNCTION__," getSwitchMethod() : ",EnumToString(tradeMethod));
+      //Print(__FUNCTION__," getSwitchMethod() : ",EnumToString(tradeMethod));
       double stopPrice = gv.getStopLinePrice();
       double entryPrice = gv.getEntryLinePrice();
       linePrice = entryPrice != 0 ? entryPrice : GetEntryPrice(stopPrice);

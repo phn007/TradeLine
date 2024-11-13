@@ -2,5 +2,6 @@
 #define KEY_SWITCH_TRADELINE     49  //#1
 #define KEY_SWITCH_TRADE_METHOD  50  //#2
 #define KEY_RESET_TRADELINE      51  //#3
+#define KEY_SWITCH_RRFIB         52  //#4
 
 #define MOUSEMOVE_ACTION_CLICK_DRAG 1

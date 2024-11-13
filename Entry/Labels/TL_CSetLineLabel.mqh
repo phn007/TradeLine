@@ -65,7 +65,7 @@ void CSetLineLabel::CreateLabel(void)
 //+------------------------------------------------------------------+
 void CSetLineLabel::SetProperties(void)
 {
-   Print(__FUNCTION__," text : ",text);
+   //Print(__FUNCTION__," text : ",text);
    CLabel label(labelName);
    label.SetXDistance(xDistance);
    label.SetYDistance(yDistance);
@@ -80,7 +80,7 @@ void CSetLineLabel::SetProperties(void)
 //+------------------------------------------------------------------+
 void CSetLineLabel::SwitchOnOff()
 {
-   Print(__FUNCTION__," gvSwitchTradeLine",gvSwitchTradeLine);
+   //Print(__FUNCTION__," gvSwitchTradeLine",gvSwitchTradeLine);
    if(gvSwitchTradeLine == SWITCH_TRADELINE_ON)
    {
       CreateLabel();
@@ -96,7 +96,7 @@ void CSetLineLabel::SwitchOnOff()
 //+------------------------------------------------------------------+
 void CSetLineLabel::UpdateLabel(void)
 {
-   Print(__FUNCTION__," | labelName: ",labelName," | text: ",text);
+   //Print(__FUNCTION__," | labelName: ",labelName," | text: ",text);
    if(gvSwitchTradeLine == SWITCH_TRADELINE_ON)
    {
       CLabel label(labelName);

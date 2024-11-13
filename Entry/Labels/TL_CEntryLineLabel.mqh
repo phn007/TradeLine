@@ -13,7 +13,7 @@ class CEntryLineLabel : public CSetLineLabel
 //+------------------------------------------------------------------+
 CEntryLineLabel::CEntryLineLabel()
 {
-   Print(__FUNCTION__);
+   //Print(__FUNCTION__);
    //---
    labelName = ENTRYLINE_NAME + "_Label";
    gvSwitchTradeLine = gv.getSwitchTradeLine();

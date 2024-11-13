@@ -17,6 +17,8 @@
 #include "Entry\Labels\TL_CSetLineLabel.mqh"
 #include "Entry\Labels\TL_CStopLabel.mqh"
 #include "Entry\Labels\TL_CEntryLineLabel.mqh"
+#include "Entry\RRFib\TL_CRRFib.mqh"
+#include "Entry\RRFib\TL_CEntryRRFib.mqh"
 
 //---
 CGlobalVariables gv;
@@ -56,7 +58,12 @@ void OnTick()
    CSetLineLabel *entryLabel = new CEntryLineLabel();
    entryLabel.UpdateLabel();
    //---
+   CRRFib *entryRRFib = new CEntryRRFib();
+   entryRRFib.Move();     
+   //---   
+   delete(line);
    delete(entryLabel);
+   delete(entryRRFib);
 }
 //+------------------------------------------------------------------+
 //| Trade function                                                   |
@@ -95,7 +102,7 @@ void OnChartEvent(const int id,
             stopLabel.SwitchOnOff();
             CSetLineLabel *entryLabel = new CEntryLineLabel();
             entryLabel.SwitchOnOff();
-            //---
+
             delete(gvSwitch);
             delete(stopLine);
             delete(entryLine);
@@ -147,7 +154,20 @@ void OnChartEvent(const int id,
             ChartRedraw(0);
          }
          break;
-         default:Print("Pressed unlisted key");
+         case KEY_SWITCH_RRFIB: //#4
+         {
+            CRRFib *gvSwitchRRFib = new CRRFib();
+            gvSwitchRRFib.SetSwitchRRFib();
+            delete(gvSwitchRRFib);
+            //---
+            CRRFib *rrfib = new CEntryRRFib();
+            rrfib.SwitchOnOff();
+            delete(rrfib);  
+            //---
+            ChartRedraw(0);           
+         }
+         break;
+         default:Print("Pressed unlisted key"); break;
       }
    }
    if(id == CHARTEVENT_OBJECT_DRAG)
@@ -167,8 +187,12 @@ void OnChartEvent(const int id,
       CSetLineLabel *entryLabel = new CEntryLineLabel();
       entryLabel.UpdateLabel();
       //---
+      CRRFib *entryRRFib = new CEntryRRFib();
+      entryRRFib.Move();
+      //---      
       delete(entryLabel);
       delete(stopLabel);
+      delete(entryRRFib);
       ChartRedraw(0);
    }
    if(id == CHARTEVENT_MOUSE_MOVE)
@@ -185,9 +209,13 @@ void OnChartEvent(const int id,
             stopLabel.UpdateLabel();
             CSetLineLabel *entryLabel = new CEntryLineLabel();
             entryLabel.UpdateLabel();
-            //---         
+            //---
+            CRRFib *entryRRFib = new CEntryRRFib();
+            entryRRFib.Move();              
+            //---                   
             delete(stopLabel);
             delete(entryLabel);
+            delete(entryRRFib);
          }               
       }
    }

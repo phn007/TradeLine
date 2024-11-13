@@ -66,13 +66,14 @@ void CSetTradeLine::SwitchOnOff(void)
    //---
    if(gvSwitchTradeLine == SWITCH_TRADELINE_ON)
    {
-      Print(__FUNCTION__, " gvSwitchTradeLine: ",EnumToString(gvSwitchTradeLine)," | ",lineName);
+      //Print(__FUNCTION__, " gvSwitchTradeLine: ",EnumToString(gvSwitchTradeLine)," | ",lineName);
       CreateLine();
       SetProperties();
+      SetCurrentTradelinePriceForGV();
    }
    else if(gvSwitchTradeLine == SWITCH_TRADELINE_OFF)
    {
-      Print(__FUNCTION__, " gvSwitchTradeLine: ",EnumToString(gvSwitchTradeLine)," | ",lineName);
+      //Print(__FUNCTION__, " gvSwitchTradeLine: ",EnumToString(gvSwitchTradeLine)," | ",lineName);
       DeleteLine();
    }
 }
@@ -118,6 +119,8 @@ void CSetTradeLine::UpdateLine(void)
    //Print(__FUNCTION__);
    CHLine line(lineName);
    line.SetPrice1(linePrice);
+   SetCurrentTradelinePriceForGV();
+   
 }
 //+------------------------------------------------------------------+
 //| Update Current TradeLine Price to GV                             |
@@ -131,7 +134,7 @@ void CSetTradeLine::SetCurrentTradelinePriceForGV(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::ResetTradeLine(void)
 {
-   Print(__FUNCTION__," name: ", lineName," | price: ", linePrice);
+   //Print(__FUNCTION__," name: ", lineName," | price: ", linePrice);
    CHLine line(lineName);
    line.SetPrice1(linePrice);
    //---
@@ -142,10 +145,12 @@ void CSetTradeLine::ResetTradeLine(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::SwitchTradeMethod(void)
 {
-   Print(__FUNCTION__);
+   //Print(__FUNCTION__);
    CHLine line(lineName);
    line.SetText(text);
    line.SetSelectable(select);
    line.SetSelected(select);
    line.SetPrice1(linePrice);
+   //---   
+   SetCurrentTradelinePriceForGV();
 }

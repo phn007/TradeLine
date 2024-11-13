@@ -11,6 +11,8 @@
 #define ENTRYLINE_MARKET_TEXT    "#Entry : ByMarket"
 #define ENTRYLINE_PENDING_TEXT   "#Entry : Pending"
 //---
+#define RRFIB_NAME   "3121_RRFib"
+//---
 #define MONEY_RISK 5
 //---
 enum TRADELINE_CONSTRUCT

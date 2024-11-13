@@ -26,7 +26,7 @@ class CStopLine : public CSetTradeLine
 //+------------------------------------------------------------------+
 CStopLine::CStopLine(TRADELINE_CONSTRUCT con)
 {
-   Print(__FUNCTION__," Constructor: ",EnumToString(con));
+   //Print(__FUNCTION__," Constructor: ",EnumToString(con));
    lineName = STOPLINE_NAME; 
    
    double point = SymbolInfoDouble(Symbol(),SYMBOL_POINT);
@@ -39,8 +39,6 @@ CStopLine::CStopLine(TRADELINE_CONSTRUCT con)
 //+------------------------------------------------------------------+
 CStopLine::CStopLine()
 {
-   
-//*
    lineName = STOPLINE_NAME;  
    //---
    text     = STOPLINE_TEXT;
@@ -49,7 +47,7 @@ CStopLine::CStopLine()
    
    linePrice         = GetStopPrice(gv.getStopLinePrice());
    gvSwitchTradeLine = gv.getSwitchTradeLine();
-   
+   /*
    Print(__FUNCTION__," lineName: ", lineName,
    " | linePrice: ",linePrice,
    " | gvSwitchTradeLine: ",EnumToString(gv.getSwitchTradeLine()));
