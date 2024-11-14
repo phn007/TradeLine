@@ -19,19 +19,6 @@
 #define RRFIB_NAME   "3121_RRFib"
 //---
 #define MONEY_RISK   5
-//---RRR
-/*
-#define RRRx0        0
-#define RRRx1        1
-#define RRRx2        2
-#define RRRx3        3
-#define RRRx4        4
-#define RRRx5        5
-#define RRRx6        6
-#define RRRx7        7
-#define RRRx8        8
-#define RRRx9        9
-*/
 //---
 enum RISK_REWARD_RATIO
 {

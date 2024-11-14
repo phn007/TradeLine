@@ -41,7 +41,14 @@ CProfitLine::CProfitLine(RISK_REWARD_RATIO ratio)
    clr      = PROFITLINE_COLOR;
    select   = PROFITLINE_SELECT; 
    //---
-   SetLinePriceByRRR(ratio);
+   if(ratio == RRRx0)
+   {
+      linePrice = gv.GetProfitLinePrice();
+   }
+   else
+   {
+      SetLinePriceByRRR(ratio);
+   }
 //---
 }
 //+------------------------------------------------------------------+
@@ -73,7 +80,22 @@ void CProfitLine::SetLinePriceByRRR(RISK_REWARD_RATIO ratio)
 //+------------------------------------------------------------------+
 void CProfitLine::UpdateRatio(void)
 {
-   Print(__FUNCTION__);
+   if(gv.GetSwitchTradeLine() == SWITCH_TRADELINE_ON)
+   {
+      Print(__FUNCTION__," SWITCH_TRADELINE_ON");
+      //---      
+      if(gv.GetSwitchProfitLine() == SWITCH_PROFITLINE_ON)
+      {
+         Print(__FUNCTION__," SWITCH_PROFITLINE_ON -> Move price to ",linePrice);
+         //---         
+         CHLine line(lineName);
+         line.Move(linePrice);
+      }
+      else
+      {
+         Print(__FUNCTION__," SWITCH_PROFITLINE_OFF");
+      }
+   }
 }
 //+------------------------------------------------------------------+
 //|                                                                  |

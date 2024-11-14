@@ -188,8 +188,113 @@ void OnChartEvent(const int id,
             ChartRedraw(0);
             //---            
          } break;
+         case KEY_PROFIT_RRRx0://#numlock0
+         {
+            Print("Pressed #Numlock 0: KEY_PROFIT_RRRx0");
+            //---            
+            CSetTradeLine *profitLine = new CProfitLine(RRRx0);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---            
+         } break;
+         case KEY_PROFIT_RRRx1: //#numlock1
+         {
+            Print("Pressed #Numlock 1: KEY_PROFIT_RRRx1");
+            //---            
+            CSetTradeLine *profitLine = new CProfitLine(RRRx1);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---                     
+         } break;
+         case KEY_PROFIT_RRRx2: //#numlock2
+         {
+            Print("Pressed #Numlock 2: KEY_PROFIT_RRRx2");
+            //---            
+            CSetTradeLine *profitLine = new CProfitLine(RRRx2);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---                               
+         } break;
+         case KEY_PROFIT_RRRx3: //#numlock3
+         {
+            Print("Pressed #Numlock 3: KEY_PROFIT_RRRx3");
+            //---            
+            CSetTradeLine *profitLine = new CProfitLine(RRRx3);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---                     
+         } break;
+         case KEY_PROFIT_RRRx4: //#numlock4
+         {
+            Print("Pressed #Numlock 4: KEY_PROFIT_RRRx4");
+            CSetTradeLine *profitLine = new CProfitLine(RRRx4);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---         
+         } break;
+         case KEY_PROFIT_RRRx5: //#numlock5
+         {
+            Print("Pressed #Numlock 5: KEY_PROFIT_RRRx5");
+            CSetTradeLine *profitLine = new CProfitLine(RRRx5);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---         
+         } break;
+         case KEY_PROFIT_RRRx6: //#numlock6
+         {
+            Print("Pressed #Numlock 6: KEY_PROFIT_RRRx6");
+            CSetTradeLine *profitLine = new CProfitLine(RRRx6);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---         
+         } break;
+         case KEY_PROFIT_RRRx7: //#numlock7
+         {
+            Print("Pressed #Numlock 7: KEY_PROFIT_RRRx7");
+            CSetTradeLine *profitLine = new CProfitLine(RRRx7);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---         
+         } break;
+         case KEY_PROFIT_RRRx8: //#numlock8
+         {
+            Print("Pressed #Numlock 8: KEY_PROFIT_RRRx8");
+            CSetTradeLine *profitLine = new CProfitLine(RRRx8);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---
+         } break;
+         case KEY_PROFIT_RRRx9: //#numlock9
+         {
+            Print("Pressed #Numlock 9: KEY_PROFIT_RRRx9");
+            CSetTradeLine *profitLine = new CProfitLine(RRRx9);
+            profitLine.UpdateRatio();
+            //---            
+            delete(profitLine);
+            ChartRedraw(0);
+            //---         
+         } break;
          default:Print("Pressed unlisted key lparame: ",lparam); break;
       }
+      
    }
    if(id == CHARTEVENT_OBJECT_DRAG)
    {
