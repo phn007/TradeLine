@@ -45,8 +45,8 @@ CStopLine::CStopLine()
    clr      = STOPLINE_COLOR;
    select   = STOPLINE_SELECT;   
    
-   linePrice         = GetStopPrice(gv.getStopLinePrice());
-   gvSwitchTradeLine = gv.getSwitchTradeLine();
+   linePrice         = GetStopPrice(gv.GetStopLinePrice());
+   gvSwitchTradeLine = gv.GetSwitchTradeLine();
    /*
    Print(__FUNCTION__," lineName: ", lineName,
    " | linePrice: ",linePrice,

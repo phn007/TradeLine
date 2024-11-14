@@ -36,10 +36,10 @@ class CRRFib
       //---
       double switchLine;
       double switchRRFib;
+      CGlobalVariables gv;
       //---
       virtual void SetObjects(){};
    private:
-      CGlobalVariables gv;
       void SetRootLevels();
    public:
       CRRFib(){};
@@ -146,9 +146,9 @@ void CRRFib::Delete(void)
 //+------------------------------------------------------------------+
 void CRRFib::Move()
 {
-   if(gv.getSwitchTradeLine() == SWITCH_TRADELINE_ON)
+   if(gv.GetSwitchTradeLine() == SWITCH_TRADELINE_ON)
    {
-      if(gv.getSwitchRRFib() == SWITCH_RRFIB_ON)
+      if(gv.GetSwitchRRFib() == SWITCH_RRFIB_ON)
       {
          ObjectSetInteger(0,objName,OBJPROP_TIME,0,time1);
          ObjectSetInteger(0,objName,OBJPROP_TIME,1,time2);
@@ -163,12 +163,12 @@ void CRRFib::Move()
 void CRRFib::SwitchOnOff(void)
 {
    
-   if(gv.getSwitchTradeLine() == SWITCH_TRADELINE_ON)
+   if(gv.GetSwitchTradeLine() == SWITCH_TRADELINE_ON)
    {
-      Print(__FUNCTION__," | gv.getSwitchTradeLine(): ",EnumToString(gv.getSwitchTradeLine()));
-      if(gv.getSwitchRRFib() == SWITCH_RRFIB_ON)
+      Print(__FUNCTION__," | gv.getSwitchTradeLine(): ",EnumToString(gv.GetSwitchTradeLine()));
+      if(gv.GetSwitchRRFib() == SWITCH_RRFIB_ON)
       {
-         Print(__FUNCTION__," | gv.getSwitchRRFib(): ",EnumToString(gv.getSwitchRRFib()));
+         Print(__FUNCTION__," | gv.getSwitchRRFib(): ",EnumToString(gv.GetSwitchRRFib()));
          Create();
          SetProperties();
          SetLevels();
@@ -176,6 +176,7 @@ void CRRFib::SwitchOnOff(void)
       }
       else
       {
+         Print(__FUNCTION__," | gv.getSwitchRRFib(): ",EnumToString(gv.GetSwitchRRFib()));
          Delete();
       }
    }

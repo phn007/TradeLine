@@ -7,6 +7,8 @@ class CEntryRRFib : public CRRFib
    public:
       CEntryRRFib();
      ~CEntryRRFib(void){};
+     //---
+     void ClearFib();
 };
 CEntryRRFib::CEntryRRFib()
 {
@@ -34,6 +36,28 @@ CEntryRRFib::CEntryRRFib()
    levelWidth  = 1;
    levelColor  = clrRoyalBlue;
    //---
+}
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void CEntryRRFib::ClearFib(void)
+{
+   if(gv.GetSwitchTradeLine() == SWITCH_TRADELINE_OFF)
+   {
+      Print(__FUNCTION__," SWITCH_TRADELINE_OFF");
+      //---      
+      if(gv.GetSwitchRRFib() == SWITCH_RRFIB_ON)
+      {
+         Print(__FUNCTION__," SWITCH_PROFITLINE_ON -> Delete ProfitLine");
+         //---         
+         if(ObjectFind(0,objName) >= 0)
+         {
+            ObjectDelete(0,objName);  
+            gv.SetSwitchOnOff(RRFIB); 
+         }
+      }
+   }
+
 }
 
 

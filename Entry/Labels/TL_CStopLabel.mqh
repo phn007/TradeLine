@@ -26,7 +26,7 @@ CStopLabel::CStopLabel()
    
    //---
    labelName         = STOPLINE_NAME + "_Label";
-   gvSwitchTradeLine = gv.getSwitchTradeLine();
+   gvSwitchTradeLine = gv.GetSwitchTradeLine();
    //---
    if(ObjectFind(0,STOPLINE_NAME) >= 0 && ObjectFind(0,ENTRYLINE_NAME) >= 0)
    {

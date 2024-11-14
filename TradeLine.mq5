@@ -14,6 +14,7 @@
 #include "Entry\Lines\TL_CSetTradeLine.mqh";
 #include "Entry\Lines\TL_CStopLine.mqh"
 #include "Entry\Lines\TL_CEntryLine.mqh"
+#include "Entry\Lines\Tl_CProfitLine.mqh"
 #include "Entry\Labels\TL_CSetLineLabel.mqh"
 #include "Entry\Labels\TL_CStopLabel.mqh"
 #include "Entry\Labels\TL_CEntryLineLabel.mqh"
@@ -30,9 +31,7 @@ int OnInit()
 //---
    ChartSetInteger(0,CHART_EVENT_OBJECT_CREATE,1);
    ChartSetInteger(0,CHART_EVENT_OBJECT_DELETE,1);
-   ChartSetInteger(0,CHART_EVENT_MOUSE_MOVE,1);   
-   
-   //gv.SetInitSwitchMethod(); //ByMarket   
+   ChartSetInteger(0,CHART_EVENT_MOUSE_MOVE,1);    
 //---
    return(INIT_SUCCEEDED);
   }
@@ -102,16 +101,21 @@ void OnChartEvent(const int id,
             stopLabel.SwitchOnOff();
             CSetLineLabel *entryLabel = new CEntryLineLabel();
             entryLabel.SwitchOnOff();
-
+            //---            
             delete(gvSwitch);
-            delete(stopLine);
             delete(entryLine);
+            delete(stopLine);           
             delete(stopLabel);
             delete(entryLabel);
             //---
-            ChartRedraw(0);        
-         }   
-         break; 
+            CProfitLine proline;
+            proline.ClearLine();
+            //---
+            CEntryRRFib fib;
+            fib.ClearFib();
+            ChartRedraw(0); 
+            //---                   
+         } break; 
          case KEY_SWITCH_TRADE_METHOD: //#2
          {
             Print("Pressed #2: KEY_SWITCH_TRADE_METHOD"); 
@@ -129,8 +133,8 @@ void OnChartEvent(const int id,
             delete(entryLabel);
             //---
             ChartRedraw(0);
-         }
-         break;
+            //---            
+         } break;
          case KEY_RESET_TRADELINE: //#3
          {
             Print("Pressed #3: KEY_RESET_TRADELINE");
@@ -148,14 +152,16 @@ void OnChartEvent(const int id,
             CSetLineLabel *entryLabel = new CEntryLineLabel();
             entryLabel.UpdateLabel();
             //---
+            delete(stopLabel);            
             delete(entryLabel);
-            delete(stopLabel);
             //---            
             ChartRedraw(0);
-         }
-         break;
-         case KEY_SWITCH_RRFIB: //#4
+            //---            
+         } break;
+         case KEY_SWITCH_RRFIB: //#F
          {
+            Print("Pressed #F: KEY_SWITCH_RRFIB");
+            //---            
             CRRFib *gvSwitchRRFib = new CRRFib();
             gvSwitchRRFib.SetSwitchRRFib();
             delete(gvSwitchRRFib);
@@ -164,10 +170,25 @@ void OnChartEvent(const int id,
             rrfib.SwitchOnOff();
             delete(rrfib);  
             //---
-            ChartRedraw(0);           
-         }
-         break;
-         default:Print("Pressed unlisted key"); break;
+            ChartRedraw(0);  
+            //---                     
+         } break;
+         case KEY_SWITCH_PROFITLINE : //#R
+         {
+            Print("Pressed #R: KEY_SWITCH_PROFITLINE");
+            //---
+            CSetTradeLine *gvSwitch = new CSetTradeLine();
+            gvSwitch.setSwitchProfitLine();
+            delete(gvSwitch);
+            //---            
+            CSetTradeLine *profitLine = new CProfitLine(RRRx1);
+            profitLine.SwitchProfitLineOnOff();    
+            delete(profitLine);
+            //---            
+            ChartRedraw(0);
+            //---            
+         } break;
+         default:Print("Pressed unlisted key lparame: ",lparam); break;
       }
    }
    if(id == CHARTEVENT_OBJECT_DRAG)
@@ -187,12 +208,17 @@ void OnChartEvent(const int id,
       CSetLineLabel *entryLabel = new CEntryLineLabel();
       entryLabel.UpdateLabel();
       //---
-      CRRFib *entryRRFib = new CEntryRRFib();
-      entryRRFib.Move();
-      //---      
       delete(entryLabel);
       delete(stopLabel);
+      //---
+      CRRFib *entryRRFib = new CEntryRRFib();
+      entryRRFib.Move();
       delete(entryRRFib);
+      //--- 
+      CSetTradeLine *profitLine = new CProfitLine();
+      profitLine.SetCurrentTradelinePriceForGV();        
+      delete(profitLine);
+      //---      
       ChartRedraw(0);
    }
    if(id == CHARTEVENT_MOUSE_MOVE)

@@ -18,16 +18,20 @@ class CGlobalVariables
       string switchMethodName;
       string switchTradeLineName;
       string switchRRFibName;
+      string switchProfitLineName;
       //---      
       string gvStopLineName;
       string gvEntryLineName;
+      string gvProfitLineName;
       //---
       double switchTradeLine;
       double switchMethod;
       double switchRRFib;
+      double switchProfitLine;
       //---      
       double stopPrice;
       double entryPrice;
+      double profitPrice;
    //--- method
    private:
       void SetSwitchVariables(string name);
@@ -40,12 +44,14 @@ class CGlobalVariables
       //---
       void SetPriceLineVariable(string name);
       //---
-      SWICTH_METHOD     getSwitchMethod();
-      SWITCH_TRADELINE  getSwitchTradeLine();
-      SWITCH_RRFIB      getSwitchRRFib();
+      SWICTH_METHOD     GetSwitchMethod();
+      SWITCH_TRADELINE  GetSwitchTradeLine();
+      SWITCH_RRFIB      GetSwitchRRFib();
+      SWITCH_PROFITLINE GetSwitchProfitLine();
       //---
-      double getStopLinePrice();
-      double getEntryLinePrice();
+      double GetStopLinePrice();
+      double GetEntryLinePrice();
+      double GetProfitLinePrice();
 };
 //+------------------------------------------------------------------+
 //|  Construct                                                       |
@@ -56,13 +62,16 @@ CGlobalVariables::CGlobalVariables(void)
    switchMethodName     = "TL_P3121_Trade_Method_Switch_OnOff";
    switchTradeLineName  = "TL_P3121_TradeLine_Switch_OnOff";
    switchRRFibName      = "TL_P3121_RRFib_Switch_OnOff";
+   switchProfitLineName = "TL_P3121_ProfitLine_Switch_OnOff";
    //---   
    gvStopLineName       = "TL_" + Symbol() + "_" + STOPLINE_NAME;
    gvEntryLineName      = "TL_" + Symbol() + "_" + ENTRYLINE_NAME;
+   gvProfitLineName     = "TL_" + Symbol() + "_" + PROFITLINE_NAME;
    //---
    switchTradeLine  = NULL;
    switchMethod     = NULL;
    switchRRFib      = NULL;
+   switchProfitLine = NULL;
    stopPrice        = NULL;
    entryPrice       = NULL;
    
@@ -84,9 +93,10 @@ void CGlobalVariables::SetSwitchOnOff(SWITCH_TYPE type)
 {
    switch(type)
    {
-      case TRADELINE : SetSwitchVariables(switchTradeLineName);   break;
-      case METHOD    : SetSwitchVariables(switchMethodName);      break;
-      case RRFIB     : SetSwitchVariables(switchRRFibName);       break;
+      case TRADELINE    : SetSwitchVariables(switchTradeLineName);   break;
+      case METHOD       : SetSwitchVariables(switchMethodName);      break;
+      case RRFIB        : SetSwitchVariables(switchRRFibName);       break;
+      case PROFITLINE   : SetSwitchVariables(switchProfitLineName);  break;
    }
 }
 //+------------------------------------------------------------------+
@@ -113,7 +123,7 @@ void CGlobalVariables::SetSwitchVariables(string name)
 //+------------------------------------------------------------------+
 //| StopLinePrice                                                    |
 //+------------------------------------------------------------------+
-double CGlobalVariables::getStopLinePrice(void)
+double CGlobalVariables::GetStopLinePrice(void)
 {
    if(GlobalVariableGet(gvStopLineName,stopPrice))
    {
@@ -124,7 +134,7 @@ double CGlobalVariables::getStopLinePrice(void)
 //+------------------------------------------------------------------+
 //|  EntryLinePrice                                                  |
 //+------------------------------------------------------------------+
-double CGlobalVariables::getEntryLinePrice(void)
+double CGlobalVariables::GetEntryLinePrice(void)
 {
    if(GlobalVariableGet(gvEntryLineName,entryPrice))
    {
@@ -133,10 +143,21 @@ double CGlobalVariables::getEntryLinePrice(void)
    else return 0;
 }
 //+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+double CGlobalVariables::GetProfitLinePrice(void)
+{
+   if(GlobalVariableGet(gvProfitLineName,profitPrice))
+   {
+      return profitPrice;
+   }
+   else return 0;
+}
+//+------------------------------------------------------------------+
 //| SwitchMethod                                                     |
 //+------------------------------------------------------------------+
 //*
-SWICTH_METHOD CGlobalVariables::getSwitchMethod()
+SWICTH_METHOD CGlobalVariables::GetSwitchMethod()
 {
    switchMethod = GlobalVariableGet(switchMethodName);
    //Print(__FUNCTION__," switchMethod: ",switchMethod);
@@ -150,7 +171,7 @@ SWICTH_METHOD CGlobalVariables::getSwitchMethod()
 //+------------------------------------------------------------------+
 //| SwitchTradeLine                                                  |
 //+------------------------------------------------------------------+
-SWITCH_TRADELINE CGlobalVariables::getSwitchTradeLine(void)
+SWITCH_TRADELINE CGlobalVariables::GetSwitchTradeLine(void)
 {
    switchTradeLine = GlobalVariableGet(switchTradeLineName);
    //---
@@ -161,7 +182,7 @@ SWITCH_TRADELINE CGlobalVariables::getSwitchTradeLine(void)
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
-SWITCH_RRFIB CGlobalVariables::getSwitchRRFib(void)
+SWITCH_RRFIB CGlobalVariables::GetSwitchRRFib(void)
 {
    switchRRFib = GlobalVariableGet(switchRRFibName);
    //---
@@ -172,13 +193,24 @@ SWITCH_RRFIB CGlobalVariables::getSwitchRRFib(void)
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
+SWITCH_PROFITLINE CGlobalVariables::GetSwitchProfitLine(void)
+{
+   switchProfitLine = GlobalVariableGet(switchProfitLineName);
+   if(switchProfitLine == 0)        return SWITCH_PROFITLINE_OFF;
+   else if(switchProfitLine == 1)   return SWITCH_PROFITLINE_ON;
+   else                             return SWITCH_PROFITLINE_NONE;
+}
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
 void CGlobalVariables::SetPriceLineVariable(string name)
 {
    double price = 0;
    string gvLineName = NULL;
    //---
-   if(name == STOPLINE_NAME)        gvLineName = gvStopLineName;
-   else if (name == ENTRYLINE_NAME) gvLineName = gvEntryLineName;  
+   if       (name == STOPLINE_NAME)    gvLineName = gvStopLineName;
+   else if  (name == ENTRYLINE_NAME)   gvLineName = gvEntryLineName; 
+   else if  (name == PROFITLINE_NAME)  gvLineName = gvProfitLineName; 
    //---
    if(gvLineName != NULL)
    {

@@ -24,7 +24,8 @@ class CSetTradeLine
       color  clr;
       bool   select;
       //---
-      SWITCH_TRADELINE gvSwitchTradeLine;
+      SWITCH_TRADELINE  gvSwitchTradeLine;
+      SWITCH_PROFITLINE gvSwitchProfitLine;
    private:  
       void CreateLine();
       void DeleteLine();  
@@ -34,15 +35,26 @@ class CSetTradeLine
      //---
      void SwitchOnOff();
      void UpdateLine();
-     void SetCurrentTradelinePriceForGV();
-     void SetSwitchTradeLine();   //Global Variable
-     void SetSwitchTradeMethod(); //Global Variable
+     void SetCurrentTradelinePriceForGV();   //Global Variable
+     void SetSwitchTradeLine();              //Global Variable
+     void SetSwitchTradeMethod();            //Global Variable
+     void setSwitchProfitLine();             //Global Variable
      void SetProperties();
      //---
      void ResetTradeLine();
      void SwitchTradeMethod();
+     void SwitchProfitLineOnOff();
+     //---
+     virtual void UpdateRatio(){};
      
 };
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
+void CSetTradeLine::setSwitchProfitLine(void)
+{
+   gv.SetSwitchOnOff(PROFITLINE);
+}
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -61,19 +73,36 @@ void CSetTradeLine::SetSwitchTradeMethod(void)
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
+void CSetTradeLine::SwitchProfitLineOnOff(void)
+{
+   if(gvSwitchTradeLine == SWITCH_TRADELINE_ON)
+   {
+      if(gvSwitchProfitLine == SWITCH_PROFITLINE_ON)
+      {
+         CreateLine();
+         SetProperties();
+         SetCurrentTradelinePriceForGV();
+      }
+      else if(gvSwitchProfitLine == SWITCH_PROFITLINE_OFF)
+      {
+         DeleteLine();
+      }
+   }
+}
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
 void CSetTradeLine::SwitchOnOff(void)
 {
    //---
    if(gvSwitchTradeLine == SWITCH_TRADELINE_ON)
    {
-      //Print(__FUNCTION__, " gvSwitchTradeLine: ",EnumToString(gvSwitchTradeLine)," | ",lineName);
       CreateLine();
       SetProperties();
       SetCurrentTradelinePriceForGV();
    }
    else if(gvSwitchTradeLine == SWITCH_TRADELINE_OFF)
    {
-      //Print(__FUNCTION__, " gvSwitchTradeLine: ",EnumToString(gvSwitchTradeLine)," | ",lineName);
       DeleteLine();
    }
 }
@@ -83,7 +112,6 @@ void CSetTradeLine::SwitchOnOff(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::CreateLine()
 {
-   //Print(__FUNCTION__," lineName: ",lineName);
    CHLine line(lineName);
    line.Create();
 }
@@ -92,7 +120,6 @@ void CSetTradeLine::CreateLine()
 //+------------------------------------------------------------------+
 void CSetTradeLine::SetProperties(void)
 {
-   //Print(__FUNCTION__);
    CHLine line(lineName);
    line.SetText(text);
    line.SetColor(clr);
@@ -105,7 +132,6 @@ void CSetTradeLine::SetProperties(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::DeleteLine(void)
 {
-   //Print(__FUNCTION__);
    if(ObjectFind(0,lineName) >= 0)
    {
       ObjectDelete(0,lineName);   
@@ -116,17 +142,19 @@ void CSetTradeLine::DeleteLine(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::UpdateLine(void)
 {
-   //Print(__FUNCTION__);
-   CHLine line(lineName);
-   line.SetPrice1(linePrice);
-   SetCurrentTradelinePriceForGV();
-   
+   if(gv.GetSwitchMethod() == MARKET)
+   {
+      CHLine line(lineName);
+      line.SetPrice1(linePrice);
+      SetCurrentTradelinePriceForGV();
+   }  
 }
 //+------------------------------------------------------------------+
 //| Update Current TradeLine Price to GV                             |
 //+------------------------------------------------------------------+
 void CSetTradeLine::SetCurrentTradelinePriceForGV(void)
 {
+   Print(__FUNCTION__," lineName: ",lineName," | linePrice: ", linePrice);
    gv.SetPriceLineVariable(lineName);
 }
 //+------------------------------------------------------------------+
@@ -134,7 +162,6 @@ void CSetTradeLine::SetCurrentTradelinePriceForGV(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::ResetTradeLine(void)
 {
-   //Print(__FUNCTION__," name: ", lineName," | price: ", linePrice);
    CHLine line(lineName);
    line.SetPrice1(linePrice);
    //---
@@ -145,7 +172,6 @@ void CSetTradeLine::ResetTradeLine(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::SwitchTradeMethod(void)
 {
-   //Print(__FUNCTION__);
    CHLine line(lineName);
    line.SetText(text);
    line.SetSelectable(select);
