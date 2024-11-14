@@ -25,7 +25,8 @@ class CSetLineLabel
       ENUM_ANCHOR_POINT anchor;
       ENUM_BASE_CORNER  corner;
       //---
-      SWITCH_TRADELINE gvSwitchTradeLine;
+      SWITCH_TRADELINE  gvSwitchTradeLine;
+      SWITCH_PROFITLINE gvSwitchProfitLine;
       //---
       CGlobalVariables gv;
    //--- Method

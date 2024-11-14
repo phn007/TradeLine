@@ -18,6 +18,7 @@
 #include "Entry\Labels\TL_CSetLineLabel.mqh"
 #include "Entry\Labels\TL_CStopLabel.mqh"
 #include "Entry\Labels\TL_CEntryLineLabel.mqh"
+#include "Entry\Labels\TL_CProfitLabel.mqh"
 #include "Entry\RRFib\TL_CRRFib.mqh"
 #include "Entry\RRFib\TL_CEntryRRFib.mqh"
 
@@ -56,13 +57,16 @@ void OnTick()
    //--- EntryLabel
    CSetLineLabel *entryLabel = new CEntryLineLabel();
    entryLabel.UpdateLabel();
+   delete(entryLabel);
+   //--- StopLabel   
+   CSetLineLabel *stopLabel = new CStopLabel();
+   stopLabel.UpdateLabel();
+   delete(stopLabel);
    //---
    CRRFib *entryRRFib = new CEntryRRFib();
-   entryRRFib.Move();     
-   //---   
-   delete(line);
-   delete(entryLabel);
-   delete(entryRRFib);
+   entryRRFib.Move();  
+   delete(entryRRFib);   
+   //---  
 }
 //+------------------------------------------------------------------+
 //| Trade function                                                   |
@@ -132,6 +136,10 @@ void OnChartEvent(const int id,
             entryLabel.UpdateLabel();
             delete(entryLabel);
             //---
+            CSetLineLabel *stopLabel = new CStopLabel();
+            stopLabel.UpdateLabel();
+            delete(stopLabel);
+            //---
             ChartRedraw(0);
             //---            
          } break;
@@ -184,7 +192,11 @@ void OnChartEvent(const int id,
             CSetTradeLine *profitLine = new CProfitLine(RRRx1);
             profitLine.SwitchProfitLineOnOff();    
             delete(profitLine);
-            //---            
+            //---
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.SwitchOnOff();
+            delete(profitLabel);                
+            //---                    
             ChartRedraw(0);
             //---            
          } break;
@@ -194,8 +206,12 @@ void OnChartEvent(const int id,
             //---            
             CSetTradeLine *profitLine = new CProfitLine(RRRx0);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //--- 
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---            
             ChartRedraw(0);
             //---            
          } break;
@@ -205,8 +221,12 @@ void OnChartEvent(const int id,
             //---            
             CSetTradeLine *profitLine = new CProfitLine(RRRx1);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //---            
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---            
             ChartRedraw(0);
             //---                     
          } break;
@@ -216,8 +236,12 @@ void OnChartEvent(const int id,
             //---            
             CSetTradeLine *profitLine = new CProfitLine(RRRx2);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //---   
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---          
             ChartRedraw(0);
             //---                               
          } break;
@@ -227,8 +251,12 @@ void OnChartEvent(const int id,
             //---            
             CSetTradeLine *profitLine = new CProfitLine(RRRx3);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //---   
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---          
             ChartRedraw(0);
             //---                     
          } break;
@@ -237,8 +265,12 @@ void OnChartEvent(const int id,
             Print("Pressed #Numlock 4: KEY_PROFIT_RRRx4");
             CSetTradeLine *profitLine = new CProfitLine(RRRx4);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //---  
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---           
             ChartRedraw(0);
             //---         
          } break;
@@ -247,8 +279,12 @@ void OnChartEvent(const int id,
             Print("Pressed #Numlock 5: KEY_PROFIT_RRRx5");
             CSetTradeLine *profitLine = new CProfitLine(RRRx5);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //---   
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---          
             ChartRedraw(0);
             //---         
          } break;
@@ -257,8 +293,12 @@ void OnChartEvent(const int id,
             Print("Pressed #Numlock 6: KEY_PROFIT_RRRx6");
             CSetTradeLine *profitLine = new CProfitLine(RRRx6);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //---      
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---       
             ChartRedraw(0);
             //---         
          } break;
@@ -267,8 +307,12 @@ void OnChartEvent(const int id,
             Print("Pressed #Numlock 7: KEY_PROFIT_RRRx7");
             CSetTradeLine *profitLine = new CProfitLine(RRRx7);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //---     
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---        
             ChartRedraw(0);
             //---         
          } break;
@@ -277,8 +321,12 @@ void OnChartEvent(const int id,
             Print("Pressed #Numlock 8: KEY_PROFIT_RRRx8");
             CSetTradeLine *profitLine = new CProfitLine(RRRx8);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //---   
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---          
             ChartRedraw(0);
             //---
          } break;
@@ -287,8 +335,12 @@ void OnChartEvent(const int id,
             Print("Pressed #Numlock 9: KEY_PROFIT_RRRx9");
             CSetTradeLine *profitLine = new CProfitLine(RRRx9);
             profitLine.UpdateRatio();
-            //---            
             delete(profitLine);
+            //---  
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();
+            delete(profitLabel);          
+            //---                      
             ChartRedraw(0);
             //---         
          } break;
@@ -323,7 +375,11 @@ void OnChartEvent(const int id,
       CSetTradeLine *profitLine = new CProfitLine();
       profitLine.SetCurrentTradelinePriceForGV();        
       delete(profitLine);
-      //---      
+      //---    
+      CSetLineLabel *profitLabel = new CProfitLabel();
+      profitLabel.UpdateLabel();
+      delete(profitLabel); 
+      //---         
       ChartRedraw(0);
    }
    if(id == CHARTEVENT_MOUSE_MOVE)
@@ -332,21 +388,28 @@ void OnChartEvent(const int id,
       {
          CHLineMouseMove stopLine (dparam,STOPLINE_NAME); 
          CHLineMouseMove entryLine(dparam,ENTRYLINE_NAME);
+         CHLineMouseMove profitLine(dparam,PROFITLINE_NAME);
          //---
          if(stopLine.MoveAllowed()  == true || 
-            entryLine.MoveAllowed() == true )
+            entryLine.MoveAllowed() == true ||
+            profitLine.MoveAllowed())
          {
             CSetLineLabel *stopLabel = new CStopLabel();
             stopLabel.UpdateLabel();
+            //---            
             CSetLineLabel *entryLabel = new CEntryLineLabel();
             entryLabel.UpdateLabel();
             //---
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.UpdateLabel();             
+            //---            
             CRRFib *entryRRFib = new CEntryRRFib();
             entryRRFib.Move();              
             //---                   
             delete(stopLabel);
             delete(entryLabel);
             delete(entryRRFib);
+            delete(profitLabel); 
          }               
       }
    }

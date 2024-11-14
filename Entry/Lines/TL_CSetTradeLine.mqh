@@ -154,7 +154,7 @@ void CSetTradeLine::UpdateLine(void)
 //+------------------------------------------------------------------+
 void CSetTradeLine::SetCurrentTradelinePriceForGV(void)
 {
-   Print(__FUNCTION__," lineName: ",lineName," | linePrice: ", linePrice);
+   //Print(__FUNCTION__," lineName: ",lineName," | linePrice: ", linePrice);
    gv.SetPriceLineVariable(lineName);
 }
 //+------------------------------------------------------------------+
