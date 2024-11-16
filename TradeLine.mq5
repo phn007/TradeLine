@@ -11,7 +11,7 @@
 #include "Include\TL_CGlobalVariables.mqh"
 #include "Include\TL_CValidateMouseMove.mqh"
 //---
-#include "Entry\Lines\TL_CSetTradeLine.mqh";
+#include "Entry\Lines\TL_CSetTradeLine.mqh"
 #include "Entry\Lines\TL_CStopLine.mqh"
 #include "Entry\Lines\TL_CEntryLine.mqh"
 #include "Entry\Lines\Tl_CProfitLine.mqh"
@@ -21,6 +21,8 @@
 #include "Entry\Labels\TL_CProfitLabel.mqh"
 #include "Entry\RRFib\TL_CRRFib.mqh"
 #include "Entry\RRFib\TL_CEntryRRFib.mqh"
+//---
+#include "Include\CPositionSizeCalculator.mqh"
 
 //---
 CGlobalVariables gv;
@@ -89,6 +91,14 @@ void OnChartEvent(const int id,
    {
       switch((int)lparam)
       {
+         case 81: //Q
+         {
+            Print("Pressed #Q: Test PositionSizeCalculator"); 
+         //--- POSITIONSIZECALCULATOR TEST START
+            CPositionSizeCalculator post();
+            post.Calculate();
+         //--- END
+         }; break;
          case KEY_SWITCH_TRADELINE: //#1
          {
             Print("Pressed #1: KEY_SWITCH_TRADELINE"); 
@@ -105,12 +115,15 @@ void OnChartEvent(const int id,
             stopLabel.SwitchOnOff();
             CSetLineLabel *entryLabel = new CEntryLineLabel();
             entryLabel.SwitchOnOff();
+            CSetLineLabel *profitLabel = new CProfitLabel();
+            profitLabel.SwitchOnOff();
             //---            
             delete(gvSwitch);
             delete(entryLine);
             delete(stopLine);           
             delete(stopLabel);
             delete(entryLabel);
+            delete(profitLabel);
             //---
             CProfitLine proline;
             proline.ClearLine();
@@ -350,36 +363,51 @@ void OnChartEvent(const int id,
    }
    if(id == CHARTEVENT_OBJECT_DRAG)
    {
-      Print("CHARTEVENT_OBJECT_DRAG");
-      CSetTradeLine *stopLine = new CStopLine();
-      stopLine.SetCurrentTradelinePriceForGV();
-      //---
-      CSetTradeLine *entryLine = new CEntryLine();
-      entryLine.SetCurrentTradelinePriceForGV();
-      //---
-      delete(stopLine);
-      delete(entryLine);
-      //---
-      CSetLineLabel *stopLabel = new CStopLabel();
-      stopLabel.UpdateLabel();
-      CSetLineLabel *entryLabel = new CEntryLineLabel();
-      entryLabel.UpdateLabel();
-      //---
-      delete(entryLabel);
-      delete(stopLabel);
-      //---
-      CRRFib *entryRRFib = new CEntryRRFib();
-      entryRRFib.Move();
-      delete(entryRRFib);
-      //--- 
-      CSetTradeLine *profitLine = new CProfitLine();
-      profitLine.SetCurrentTradelinePriceForGV();        
-      delete(profitLine);
-      //---    
-      CSetLineLabel *profitLabel = new CProfitLabel();
-      profitLabel.UpdateLabel();
-      delete(profitLabel); 
-      //---         
+      Print("CHARTEVENT_OBJECT_DRAG: lparam: ", lparam," | sparam: ",sparam);
+      if(sparam == STOPLINE_NAME)
+      {
+         //Print(__FUNCTION__," Drag STOPLINE_NAME");
+         CSetTradeLine *stopLine = new CStopLine();
+         stopLine.SetCurrentTradelinePriceForGV();
+         delete(stopLine);
+      }
+      if(sparam == ENTRYLINE_NAME)
+      {
+         //Print(__FUNCTION__," Drag ENTRYLINE_NAME");
+         CSetTradeLine *entryLine = new CEntryLine();
+         entryLine.SetCurrentTradelinePriceForGV();
+         delete(entryLine);
+      }
+      if(sparam == STOPLINE_NAME || sparam == ENTRYLINE_NAME)
+      {
+         //Print(__FUNCTION__," Drag STOPLINE_NAME || ENTRYLINE_NAME");
+         CSetLineLabel *stopLabel = new CStopLabel();
+         stopLabel.UpdateLabel();
+         CSetLineLabel *entryLabel = new CEntryLineLabel();
+         entryLabel.UpdateLabel();
+         //---
+         delete(entryLabel);
+         delete(stopLabel);
+         
+         CRRFib *entryRRFib = new CEntryRRFib();
+         entryRRFib.Move();
+         delete(entryRRFib);
+      }
+      if(sparam == PROFITLINE_NAME)
+      {
+         //Print(__FUNCTION__," Drag PROFITLINE_NAME");
+         CSetTradeLine *profitLine = new CProfitLine();
+         profitLine.SetCurrentTradelinePriceForGV();        
+         delete(profitLine);
+      }
+      if(sparam == STOPLINE_NAME || sparam == ENTRYLINE_NAME || sparam == PROFITLINE_NAME)
+      {
+         //Print(__FUNCTION__," STOPLINE_NAME || ENTRYLINE_NAME || PROFITLINE_NAME");
+         CSetLineLabel *profitLabel = new CProfitLabel();
+         profitLabel.UpdateLabel();
+         delete(profitLabel); 
+      }
+      //---       
       ChartRedraw(0);
    }
    if(id == CHARTEVENT_MOUSE_MOVE)
@@ -390,9 +418,9 @@ void OnChartEvent(const int id,
          CHLineMouseMove entryLine(dparam,ENTRYLINE_NAME);
          CHLineMouseMove profitLine(dparam,PROFITLINE_NAME);
          //---
-         if(stopLine.MoveAllowed()  == true || 
-            entryLine.MoveAllowed() == true ||
-            profitLine.MoveAllowed())
+         if(stopLine.MoveAllowed()   == true || 
+            entryLine.MoveAllowed()  == true ||
+            profitLine.MoveAllowed() == true)
          {
             CSetLineLabel *stopLabel = new CStopLabel();
             stopLabel.UpdateLabel();
@@ -409,7 +437,7 @@ void OnChartEvent(const int id,
             delete(stopLabel);
             delete(entryLabel);
             delete(entryRRFib);
-            delete(profitLabel); 
+            //delete(profitLabel); 
          }               
       }
    }

@@ -9,6 +9,7 @@
 //---
 #include "../../Include/TL_CGlobalVariables.mqh"
 #include "../../Include/TL_CTradingCalculator.mqh"
+#include "../../Include/CPositionSizeCalculator.mqh"
 #include "../../Objects/TL_CLabel.mqh"
 //+------------------------------------------------------------------+
 //| Base Class : CSetLineLabel                                       |

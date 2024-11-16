@@ -13,24 +13,16 @@ class CEntryLineLabel : public CSetLineLabel
 //+------------------------------------------------------------------+
 CEntryLineLabel::CEntryLineLabel()
 {
-   //Print(__FUNCTION__);
-   //---
    labelName = ENTRYLINE_NAME + "_Label";
    gvSwitchTradeLine = gv.GetSwitchTradeLine();
    //---
    if(ObjectFind(0,STOPLINE_NAME) >= 0 && ObjectFind(0,ENTRYLINE_NAME) >= 0)
    {
-      double stopPrice  = ObjectGetDouble(0,STOPLINE_NAME ,OBJPROP_PRICE);
-      double entryPrice = ObjectGetDouble(0,ENTRYLINE_NAME,OBJPROP_PRICE);
+      CPositionSizeCalculator post(MONEY_RISK);
+      post.Calculate();
+      text = post.orderTypeString + " : " + (string)post.lotSize+" Lot";
       //---
-      CTradingCalculator cal(stopPrice,entryPrice,MONEY_RISK);
-      //---
-      string orderType = cal.sOrderType;
-      double lotsize   = NormalizeDouble(cal.lotsize,2);
-      //---
-      text = orderType+" : "+(string)lotsize+" Lot";
-      //---
-      yDistance = GetYDistance(entryPrice);
+      yDistance = GetYDistance(post.entryPrice);
       xDistance = 10;
       anchor    = ANCHOR_RIGHT_UPPER;
       corner    = CORNER_RIGHT_UPPER;

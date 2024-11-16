@@ -23,29 +23,23 @@ class CStopLabel : public CSetLineLabel
 //+------------------------------------------------------------------+
 CStopLabel::CStopLabel()
 { 
-   
    //---
    labelName         = STOPLINE_NAME + "_Label";
    gvSwitchTradeLine = gv.GetSwitchTradeLine();
    //---
    if(ObjectFind(0,STOPLINE_NAME) >= 0 && ObjectFind(0,ENTRYLINE_NAME) >= 0)
    {
-      double stopPrice  = ObjectGetDouble(0,STOPLINE_NAME ,OBJPROP_PRICE);
-      double entryPrice = ObjectGetDouble(0,ENTRYLINE_NAME,OBJPROP_PRICE);
-      //---
-      CTradingCalculator cal(stopPrice,entryPrice,MONEY_RISK);
-      //---
-      double points    = NormalizeDouble(cal.points,2);
-      double moneyRisk = NormalizeDouble(cal.moneyRisk,2);
+      CPositionSizeCalculator post(MONEY_RISK);
+      post.Calculate();
+      double points    = NormalizeDouble(post.points,2);
+      double moneyRisk = NormalizeDouble(post.riskPerTrade,2);
       //---
       text        = "P/L: "+(string)moneyRisk+" USD ("+(string)points+")";
       xDistance   = 10;
-      yDistance   = GetYDistance(stopPrice);
+      yDistance   = GetYDistance(post.stopPrice);
       anchor      = ANCHOR_RIGHT_UPPER;
       corner      = CORNER_RIGHT_UPPER;
       clr         = clrWheat;
       fontSize    = 9;
-      //---
-      //Print(__FUNCTION__," text: ",text);
    }
 }
